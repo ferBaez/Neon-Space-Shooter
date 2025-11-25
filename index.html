@@ -276,7 +276,8 @@
                 width: 100%;
                 height: 100%;
                 margin: 0;
-                padding: 20px 40px; 
+                /* AJUSTE SOLICITADO: Mayor padding inferior (60px) para subir los controles */
+                padding: 0 50px 60px 50px; 
                 pointer-events: none; 
                 align-items: flex-end; 
                 background: transparent;
@@ -284,12 +285,12 @@
 
             .control-btn {
                 pointer-events: auto; 
-                opacity: 0.7; 
+                opacity: 0.85; /* Más opacos para verse mejor */
             }
             
             /* Ajuste de tamaño para landscape */
-            .control-btn { width: 60px; height: 60px; font-size: 20px; margin-bottom: 15px; }
-            #btn-shoot { width: 70px; height: 70px; font-size: 25px; }
+            .control-btn { width: 65px; height: 65px; font-size: 22px; margin-bottom: 0; } /* Margen controlado por padding del contenedor */
+            #btn-shoot { width: 75px; height: 75px; font-size: 28px; }
         }
     </style>
 </head>
