@@ -155,6 +155,37 @@
             align-items: center;
         }
 
+        /* --- FOOTER --- */
+        #game-footer {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 10px;
+            color: #888;
+            z-index: 200;
+            pointer-events: none; /* Para no bloquear clics en el juego si se superpone */
+            font-family: sans-serif; /* Fuente legible para el copyright */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #game-footer a {
+            color: var(--neon-blue);
+            text-decoration: none;
+            pointer-events: auto; /* Permitir clic en enlaces */
+            transition: color 0.3s;
+            font-weight: bold;
+        }
+
+        #game-footer a:hover {
+            color: var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-pink);
+        }
+
+        /* Separador vertical */
+        .footer-sep { margin: 0 5px; color: #555; }
+
         /* --- CONTROLES MÓVILES (ESTILO BASE) --- */
         #mobile-controls {
             display: none; /* Se activa con media queries */
@@ -258,7 +289,12 @@
                 justify-content: flex-start;
                 padding-top: 20px;
             }
-            /* El juego deja espacio abajo para los controles */
+            #game-footer {
+                bottom: 5px;
+                background: rgba(0,0,0,0.8); /* Fondo para legibilidad si se superpone */
+                padding: 5px 0;
+                width: 100%;
+            }
         }
 
         /* Móvil Horizontal (Landscape) - Los controles FLOTAN a los lados */
@@ -276,7 +312,6 @@
                 width: 100%;
                 height: 100%;
                 margin: 0;
-                /* AJUSTE SOLICITADO: Mayor padding inferior (60px) para subir los controles */
                 padding: 0 50px 60px 50px; 
                 pointer-events: none; 
                 align-items: flex-end; 
@@ -285,12 +320,21 @@
 
             .control-btn {
                 pointer-events: auto; 
-                opacity: 0.85; /* Más opacos para verse mejor */
+                opacity: 0.85; 
             }
             
             /* Ajuste de tamaño para landscape */
-            .control-btn { width: 65px; height: 65px; font-size: 22px; margin-bottom: 0; } /* Margen controlado por padding del contenedor */
+            .control-btn { width: 65px; height: 65px; font-size: 22px; margin-bottom: 0; } 
             #btn-shoot { width: 75px; height: 75px; font-size: 28px; }
+            
+            /* Footer en landscape: pequeño a la derecha o izquierda */
+            #game-footer {
+                font-size: 8px;
+                bottom: 2px;
+                text-align: center;
+                width: 100%;
+                text-shadow: 1px 1px 2px #000;
+            }
         }
     </style>
 </head>
@@ -346,6 +390,13 @@
             </div>
         </div>
     </div>
+
+    <!-- FOOTER -->
+    <footer id="game-footer">
+        Todos los derechos reservados a <a href="https://studio--hitsterai.us-central1.hosted.app/es" target="_blank">Hitster Ai</a>
+        <span class="footer-sep">|</span>
+        <a href="mailto:baez@hitster.page">Contáctanos</a>
+    </footer>
 
     <script>
         // --- CONFIGURACIÓN ---
