@@ -11,7 +11,7 @@
     <meta name="robots" content="index, follow">
     <meta name="author" content="Ferbaez">
     
-    <!-- Canonical URL (CORREGIDA) -->
+    <!-- Canonical URL -->
     <link rel="canonical" href="https://ferbaez.github.io/Neon-Space-Shooter/">
     
     <!-- Favicon -->
@@ -22,23 +22,21 @@
     <meta property="og:title" content="Neon Space Shooter 🚀">
     <meta property="og:description" content="¡Defiende la galaxia! Juega gratis a este arcade de naves estilo neón.">
     <meta property="og:site_name" content="Neon Space Shooter">
-    <!-- URL CORREGIDA -->
     <meta property="og:url" content="https://ferbaez.github.io/Neon-Space-Shooter/">
     
-    <!-- IMAGEN PRINCIPAL (CAMBIADA A UNA IMAGEN REAL ESTÁTICA) -->
-    <!-- Usamos una imagen real de Unsplash estilo Neon Arcade para asegurar que WhatsApp la detecte -->
-    <meta property="og:image" content="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
-    <meta property="og:image:secure_url" content="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    <!-- IMAGEN PRINCIPAL (ACTUALIZADA: Estética Neón Abstracta) -->
+    <meta property="og:image" content="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta property="og:image:secure_url" content="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Neon Arcade Game">
+    <meta property="og:image:alt" content="Neon Grid Background">
 
     <!-- --- TWITTER CARDS --- -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Neon Space Shooter">
     <meta name="twitter:description" content="¡Supera mi puntuación en este juego arcade retro! Juega gratis ahora.">
-    <meta name="twitter:image" content="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
 
     <!-- --- DATOS ESTRUCTURADOS JSON-LD --- -->
     <script type="application/ld+json">
@@ -294,7 +292,7 @@
             <!-- Modales -->
             <section id="start-screen" class="modal">
                 <h1>NEON<br>SHOOTER</h1>
-                <p>PC: Flechas + Espacio<br>Móvil: Arrastrar + Tocar</p>
+                <p>PC: Flechas + Espacio<br>Móvil: Tocar y arrastrar en cualquier lugar</p>
                 <button class="btn" id="start-btn">JUGAR</button>
                 <div class="enter-hint">[ PRESIONA ENTER ]</div>
             </section>
@@ -420,7 +418,7 @@
             }
         }
 
-        // --- INPUT ---
+        // --- INPUT (CORREGIDO PARA TOCAR FUERA DEL ÁREA) ---
         let keys = {};
         let mouseX = GAME_WIDTH / 2;
         let isMouseDown = false;
@@ -437,34 +435,57 @@
         });
         document.addEventListener('keyup', e => keys[e.code] = false);
 
-        function getCanvasCoordinates(clientX) {
+        // Función para mapear coordenada global (pantalla completa) al canvas lógico
+        function mapGlobalToCanvas(clientX) {
             const rect = canvas.getBoundingClientRect();
+            // Calculamos posición relativa al canvas, incluso si es negativa (fuera a la izquierda)
+            // o mayor al ancho (fuera a la derecha)
+            const relativeX = clientX - rect.left;
             const scaleX = GAME_WIDTH / rect.width;
-            return (clientX - rect.left) * scaleX;
+            
+            let finalX = relativeX * scaleX;
+
+            // Clamping manual para que la nave no "salga" si tocas muy lejos
+            if (finalX < 0) finalX = 0;
+            if (finalX > GAME_WIDTH) finalX = GAME_WIDTH;
+            
+            return finalX;
         }
 
-        window.addEventListener('mousemove', e => {
+        // Mouse (PC) - Sigue limitado al canvas por comodidad
+        canvas.addEventListener('mousemove', e => {
             if(gameState === 'PLAYING') {
-                mouseX = getCanvasCoordinates(e.clientX);
+                mouseX = mapGlobalToCanvas(e.clientX);
                 inputMode = 'mouse';
             }
         });
-        window.addEventListener('mousedown', () => { isMouseDown = true; inputMode = 'mouse'; });
-        window.addEventListener('mouseup', () => { isMouseDown = false; });
+        canvas.addEventListener('mousedown', () => { isMouseDown = true; inputMode = 'mouse'; });
+        canvas.addEventListener('mouseup', () => { isMouseDown = false; });
 
-        // Touch
+        // Touch (MÓVIL GLOBAL)
+        // Usamos 'window' en lugar de 'canvas' para permitir tocar en las bandas negras
         const handleTouch = (e) => {
-            e.preventDefault(); 
+            if(e.target.tagName !== 'BUTTON') { // Evitar prevenir click en botones
+                 e.preventDefault(); 
+            }
             const touch = e.touches[0];
-            mouseX = getCanvasCoordinates(touch.clientX);
+            mouseX = mapGlobalToCanvas(touch.clientX);
             isMouseDown = true;
             inputMode = 'mouse';
         };
 
-        canvas.addEventListener('touchstart', handleTouch, {passive: false});
-        canvas.addEventListener('touchmove', handleTouch, {passive: false});
-        canvas.addEventListener('touchend', (e) => {
-            e.preventDefault();
+        // Escuchamos en todo el documento para capturar toques fuera del juego
+        window.addEventListener('touchstart', (e) => {
+            // Solo activar juego si no es un botón de la UI
+            if (!e.target.classList.contains('btn') && !e.target.closest('button')) {
+                handleTouch(e);
+            }
+        }, {passive: false});
+        
+        window.addEventListener('touchmove', handleTouch, {passive: false});
+        
+        window.addEventListener('touchend', (e) => {
+            // No prevenimos default aquí para permitir clicks normales si fuera necesario
             isMouseDown = false;
         });
 
