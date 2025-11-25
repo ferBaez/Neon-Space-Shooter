@@ -20,7 +20,7 @@
     <meta property="og:site_name" content="Neon Space Shooter">
     <meta property="og:url" content="https://ferbaez.github.io/Neon-Space-Shooter/">
     
-    <!-- IMAGEN PREVIA NUEVA (Estilo Arcade Space) -->
+    <!-- IMAGEN PREVIA -->
     <meta property="og:image" content="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
     <meta property="og:image:secure_url" content="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
     <meta property="og:image:type" content="image/jpeg">
@@ -71,7 +71,7 @@
             overflow: hidden;
             font-family: 'Press Start 2P', cursive;
             color: #fff;
-            touch-action: none; /* Vital para evitar zoom/scroll al tocar botones */
+            touch-action: none;
             user-select: none;
             -webkit-user-select: none;
         }
@@ -84,7 +84,7 @@
             width: 100vw;
             height: 100vh;
             display: flex;
-            flex-direction: column; /* Cambiado a columna para apilar juego y controles en vertical */
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
@@ -94,8 +94,8 @@
         #game-wrapper {
             position: relative;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
-            /* Tamaño asignado por JS */
             transition: width 0.3s, height 0.3s;
+            z-index: 1; /* Asegura que el juego esté en una capa base */
         }
 
         canvas {
@@ -155,17 +155,17 @@
             align-items: center;
         }
 
-        /* --- CONTROLES MÓVILES --- */
+        /* --- CONTROLES MÓVILES (ESTILO BASE) --- */
         #mobile-controls {
-            display: none; /* Oculto en PC por defecto */
+            display: none; /* Se activa con media queries */
             width: 100%;
-            height: 160px; /* Espacio fijo para controles */
+            height: 160px; /* Altura por defecto en vertical */
             padding: 20px;
             box-sizing: border-box;
             justify-content: space-between;
             align-items: center;
             z-index: 100;
-            margin-top: 10px; /* Separación del canvas */
+            margin-top: 10px;
         }
 
         .control-group {
@@ -176,7 +176,7 @@
         .control-btn {
             width: 70px;
             height: 70px;
-            background: rgba(0, 255, 255, 0.1);
+            background: rgba(0, 255, 255, 0.15); /* Un poco más visible */
             border: 2px solid var(--neon-blue);
             border-radius: 50%;
             color: var(--neon-blue);
@@ -188,6 +188,7 @@
             user-select: none;
             cursor: pointer;
             box-shadow: 0 0 10px var(--neon-blue);
+            backdrop-filter: blur(2px);
         }
 
         .control-btn:active, .control-btn.active {
@@ -244,20 +245,53 @@
         }
         .btn:hover { background: var(--neon-blue); color: #000; }
 
-        /* Media Query para Móviles/Tablets */
-        @media (hover: none) and (pointer: coarse), (max-width: 768px) {
+        /* --- RESPONSIVIDAD AVANZADA --- */
+        
+        /* Dispositivos Táctiles (General) */
+        @media (hover: none) and (pointer: coarse) {
             #mobile-controls { display: flex; }
-            
-            /* Ajustar layout para que quepan controles */
+        }
+
+        /* Móvil Vertical (Portrait) - Los controles se quedan abajo */
+        @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
             #main-container {
                 justify-content: flex-start;
                 padding-top: 20px;
             }
-            
-            /* Asegurar que el canvas no ocupe toda la altura */
             #game-wrapper {
-                max-height: 65vh; /* Dejar espacio abajo para botones */
+                /* Deja espacio para los controles abajo */
             }
+        }
+
+        /* Móvil Horizontal (Landscape) - Los controles FLOTAN a los lados */
+        @media (hover: none) and (pointer: coarse) and (orientation: landscape) {
+            #main-container {
+                flex-direction: row; /* Importante */
+                justify-content: center;
+                padding: 0;
+            }
+
+            #mobile-controls {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 100%; /* Ocupa toda la pantalla pero es transparente */
+                margin: 0;
+                padding: 10px 40px; /* Margen lateral para no pegar botones al borde */
+                pointer-events: none; /* Deja pasar clicks al centro si fuera necesario */
+                align-items: flex-end; /* Alineados abajo */
+                background: transparent;
+            }
+
+            .control-btn {
+                pointer-events: auto; /* Reactivar clicks solo en los botones */
+                opacity: 0.8; /* Ligeramente transparente para ver fondo */
+            }
+            
+            /* Ajustar tamaño de botones en horizontal para que no estorben tanto */
+            .control-btn { width: 60px; height: 60px; font-size: 20px; margin-bottom: 10px; }
+            #btn-shoot { width: 70px; height: 70px; font-size: 25px; }
         }
     </style>
 </head>
@@ -279,8 +313,9 @@
             <!-- Modales -->
             <section id="start-screen" class="modal">
                 <h1>NEON<br>SHOOTER</h1>
-                <p>MÓVIL: Usa los botones abajo<br>PC: Flechas + Espacio</p>
+                <p>MÓVIL: Usa los botones en pantalla<br>PC: Flechas + Espacio</p>
                 <button class="btn" id="start-btn">JUGAR</button>
+                <div class="enter-hint">[ ENTER ]</div>
             </section>
 
             <section id="game-over-screen" class="modal">
@@ -300,7 +335,7 @@
             </section>
         </div>
 
-        <!-- CONTROLES MÓVILES (Fuera del canvas) -->
+        <!-- CONTROLES MÓVILES -->
         <div id="mobile-controls">
             <!-- Izquierda: Disparo -->
             <button id="btn-shoot" class="control-btn">🔥</button>
@@ -355,14 +390,24 @@
             red: '#f00', yellow: '#ff0', white: '#fff'
         };
 
-        // --- RESIZE INTELIGENTE (Soporta Vertical) ---
+        // --- RESIZE INTELIGENTE ---
         function resizeGame() {
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
-            const isMobile = windowWidth <= 768;
+            
+            // Detectar si es móvil y si está en vertical
+            const isMobile = windowWidth <= 768 || ('ontouchstart' in window);
+            const isPortrait = windowHeight > windowWidth;
 
-            // En móvil, restamos espacio para los controles (aprox 180px)
-            const availableHeight = isMobile ? windowHeight - 180 : windowHeight;
+            // Espacio reservado para controles:
+            // Solo restamos altura si es móvil y está en VERTICAL.
+            // En horizontal, los controles flotan (overlay), así que usamos toda la altura.
+            let controlsHeight = 0;
+            if (isMobile && isPortrait) {
+                controlsHeight = 160; // Altura del div #mobile-controls
+            }
+
+            const availableHeight = windowHeight - controlsHeight;
             const availableWidth = windowWidth;
 
             let newWidth = availableWidth;
@@ -383,6 +428,8 @@
         }
 
         window.addEventListener('resize', resizeGame);
+        // Llamar resize un poco después por si el navegador tarda en rotar
+        window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
         resizeGame();
 
         // --- AUDIO ---
@@ -436,7 +483,7 @@
         // Controles Táctiles (Simulan Teclado)
         function setupTouchBtn(btn, code) {
             const activate = (e) => {
-                e.preventDefault(); // Prevenir scroll/zoom
+                e.preventDefault(); 
                 keys[code] = true;
                 btn.classList.add('active');
             };
