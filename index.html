@@ -155,36 +155,58 @@
             align-items: center;
         }
 
-        /* --- FOOTER --- */
+        /* --- FOOTER PREMIUM (Alta Visibilidad) --- */
         #game-footer {
             position: fixed;
-            bottom: 10px;
+            bottom: 0;
+            left: 0;
             width: 100%;
+            background-color: rgba(5, 5, 5, 0.95); /* Fondo oscuro sólido */
+            border-top: 2px solid var(--neon-blue); /* Borde brillante */
+            box-shadow: 0 -5px 20px rgba(0, 255, 255, 0.15); /* Resplandor superior */
+            padding: 12px 0;
             text-align: center;
-            font-size: 10px;
-            color: #888;
-            z-index: 200;
-            pointer-events: none; /* Para no bloquear clics en el juego si se superpone */
-            font-family: sans-serif; /* Fuente legible para el copyright */
+            font-size: 10px; /* Tamaño legible */
+            color: #ddd;
+            z-index: 1000; /* Siempre encima */
+            font-family: 'Press Start 2P', cursive;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.5;
         }
 
         #game-footer a {
-            color: var(--neon-blue);
+            color: var(--neon-yellow); /* Enlaces en amarillo neón */
             text-decoration: none;
-            pointer-events: auto; /* Permitir clic en enlaces */
-            transition: color 0.3s;
+            pointer-events: auto;
+            transition: all 0.3s ease;
             font-weight: bold;
+            border-bottom: 1px dashed transparent;
         }
 
         #game-footer a:hover {
             color: var(--neon-pink);
-            text-shadow: 0 0 5px var(--neon-pink);
+            text-shadow: 0 0 8px var(--neon-pink);
+            border-bottom: 1px dashed var(--neon-pink);
         }
 
-        /* Separador vertical */
-        .footer-sep { margin: 0 5px; color: #555; }
+        .footer-sep { color: #555; margin: 0 2px; }
+
+        /* Responsive del Footer */
+        @media (max-width: 600px) {
+            #game-footer {
+                font-size: 8px;
+                flex-direction: column; /* Apilar en móviles muy estrechos */
+                gap: 5px;
+                padding: 10px 0;
+            }
+            .footer-sep { display: none; } /* Ocultar separador en vertical */
+        }
+
 
         /* --- CONTROLES MÓVILES (ESTILO BASE) --- */
         #mobile-controls {
@@ -197,6 +219,8 @@
             align-items: center;
             z-index: 100;
             margin-top: 10px;
+            /* AJUSTE CRÍTICO: Padding bottom extra para que el footer no tape los botones */
+            padding-bottom: 60px; 
         }
 
         .control-group {
@@ -289,12 +313,7 @@
                 justify-content: flex-start;
                 padding-top: 20px;
             }
-            #game-footer {
-                bottom: 5px;
-                background: rgba(0,0,0,0.8); /* Fondo para legibilidad si se superpone */
-                padding: 5px 0;
-                width: 100%;
-            }
+            /* El juego deja espacio abajo para los controles */
         }
 
         /* Móvil Horizontal (Landscape) - Los controles FLOTAN a los lados */
@@ -312,7 +331,8 @@
                 width: 100%;
                 height: 100%;
                 margin: 0;
-                padding: 0 50px 60px 50px; 
+                /* Ajustamos para que los botones suban y no toquen el footer */
+                padding: 0 50px 70px 50px; 
                 pointer-events: none; 
                 align-items: flex-end; 
                 background: transparent;
@@ -327,13 +347,10 @@
             .control-btn { width: 65px; height: 65px; font-size: 22px; margin-bottom: 0; } 
             #btn-shoot { width: 75px; height: 75px; font-size: 28px; }
             
-            /* Footer en landscape: pequeño a la derecha o izquierda */
+            /* Footer en landscape: más compacto */
             #game-footer {
+                padding: 5px 0;
                 font-size: 8px;
-                bottom: 2px;
-                text-align: center;
-                width: 100%;
-                text-shadow: 1px 1px 2px #000;
             }
         }
     </style>
@@ -391,11 +408,12 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
+    <!-- FOOTER VISIBLE Y FUNCIONAL -->
     <footer id="game-footer">
-        Todos los derechos reservados a <a href="https://studio--hitsterai.us-central1.hosted.app/es" target="_blank">Hitster Ai</a>
+        <span>Todos los derechos reservados a</span>
+        <a href="https://studio--hitsterai.us-central1.hosted.app/es" target="_blank" title="Visitar Hitster Ai">Hitster Ai</a>
         <span class="footer-sep">|</span>
-        <a href="mailto:baez@hitster.page">Contáctanos</a>
+        <a href="mailto:baez@hitster.page" title="Enviar correo">Contáctanos</a>
     </footer>
 
     <script>
