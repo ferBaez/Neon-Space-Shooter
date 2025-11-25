@@ -245,28 +245,26 @@
         }
         .btn:hover { background: var(--neon-blue); color: #000; }
 
-        /* --- RESPONSIVIDAD AVANZADA --- */
+        /* --- RESPONSIVIDAD AVANZADA (VISIBILIDAD GARANTIZADA) --- */
         
-        /* Dispositivos Táctiles (General) */
-        @media (hover: none) and (pointer: coarse) {
-            #mobile-controls { display: flex; }
+        /* Regla universal para activar controles en móviles/tablets (ancho menor a 1024px) O dispositivos táctiles */
+        @media (max-width: 1024px), (hover: none) and (pointer: coarse) {
+            #mobile-controls { display: flex !important; }
         }
 
         /* Móvil Vertical (Portrait) - Los controles se quedan abajo */
-        @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+        @media (max-width: 1024px) and (orientation: portrait) {
             #main-container {
                 justify-content: flex-start;
                 padding-top: 20px;
             }
-            #game-wrapper {
-                /* Deja espacio para los controles abajo */
-            }
+            /* El juego deja espacio abajo para los controles */
         }
 
         /* Móvil Horizontal (Landscape) - Los controles FLOTAN a los lados */
-        @media (hover: none) and (pointer: coarse) and (orientation: landscape) {
+        @media (max-width: 1024px) and (orientation: landscape) {
             #main-container {
-                flex-direction: row; /* Importante */
+                flex-direction: row; 
                 justify-content: center;
                 padding: 0;
             }
@@ -276,21 +274,21 @@
                 bottom: 0;
                 left: 0;
                 width: 100%;
-                height: 100%; /* Ocupa toda la pantalla pero es transparente */
+                height: 100%;
                 margin: 0;
-                padding: 10px 40px; /* Margen lateral para no pegar botones al borde */
-                pointer-events: none; /* Deja pasar clicks al centro si fuera necesario */
-                align-items: flex-end; /* Alineados abajo */
+                padding: 20px 40px; 
+                pointer-events: none; 
+                align-items: flex-end; 
                 background: transparent;
             }
 
             .control-btn {
-                pointer-events: auto; /* Reactivar clicks solo en los botones */
-                opacity: 0.8; /* Ligeramente transparente para ver fondo */
+                pointer-events: auto; 
+                opacity: 0.7; 
             }
             
-            /* Ajustar tamaño de botones en horizontal para que no estorben tanto */
-            .control-btn { width: 60px; height: 60px; font-size: 20px; margin-bottom: 10px; }
+            /* Ajuste de tamaño para landscape */
+            .control-btn { width: 60px; height: 60px; font-size: 20px; margin-bottom: 15px; }
             #btn-shoot { width: 70px; height: 70px; font-size: 25px; }
         }
     </style>
@@ -313,7 +311,7 @@
             <!-- Modales -->
             <section id="start-screen" class="modal">
                 <h1>NEON<br>SHOOTER</h1>
-                <p>MÓVIL: Usa los botones en pantalla<br>PC: Flechas + Espacio</p>
+                <p>MÓVIL: Usa los botones<br>PC: Flechas + Espacio</p>
                 <button class="btn" id="start-btn">JUGAR</button>
                 <div class="enter-hint">[ ENTER ]</div>
             </section>
@@ -395,8 +393,9 @@
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
             
-            // Detectar si es móvil y si está en vertical
-            const isMobile = windowWidth <= 768 || ('ontouchstart' in window);
+            // Detectar si es móvil basado en ancho o user agent/touch (simple)
+            // Se considera móvil si es < 1024px de ancho
+            const isMobile = windowWidth <= 1024;
             const isPortrait = windowHeight > windowWidth;
 
             // Espacio reservado para controles:
@@ -493,6 +492,7 @@
                 btn.classList.remove('active');
             };
 
+            // Soporte mixto mouse/touch para pruebas
             btn.addEventListener('touchstart', activate, {passive: false});
             btn.addEventListener('touchend', deactivate);
             btn.addEventListener('mousedown', activate);
