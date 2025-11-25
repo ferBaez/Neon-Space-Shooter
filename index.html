@@ -6,39 +6,35 @@
     
     <!-- --- SEO & AEO --- -->
     <title>Neon Space Shooter | Juego Arcade Gratis</title>
-    <meta name="description" content="Juega gratis a Neon Space Shooter. Defiende la galaxia en este clásico juego de naves arcade con gráficos de neón. Compatible con PC y móvil.">
-    <meta name="keywords" content="juego arcade, naves espaciales, neon shooter, juego gratis, html5">
+    <meta name="description" content="Juego arcade de naves espaciales. Dispara y esquiva en este clásico estilo neón. Controles táctiles optimizados para móvil.">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Ferbaez">
     
-    <!-- Canonical URL -->
     <link rel="canonical" href="https://ferbaez.github.io/Neon-Space-Shooter/">
-    
-    <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
 
-    <!-- --- OPEN GRAPH (METAETIQUETAS PARA WHATSAPP/FACEBOOK) --- -->
+    <!-- --- OPEN GRAPH --- -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Neon Space Shooter 🚀">
-    <meta property="og:description" content="¡Defiende la galaxia! Juega gratis a este arcade de naves estilo neón.">
+    <meta property="og:description" content="Juego arcade de naves. ¡Juega ahora en tu móvil o PC!">
     <meta property="og:site_name" content="Neon Space Shooter">
     <meta property="og:url" content="https://ferbaez.github.io/Neon-Space-Shooter/">
     
-    <!-- IMAGEN PRINCIPAL (ACTUALIZADA: Estética Neón Abstracta) -->
-    <meta property="og:image" content="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
-    <meta property="og:image:secure_url" content="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    <!-- IMAGEN PREVIA NUEVA (Estilo Arcade Space) -->
+    <meta property="og:image" content="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta property="og:image:secure_url" content="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Neon Grid Background">
+    <meta property="og:image:alt" content="Retro Arcade Space Shooter">
 
     <!-- --- TWITTER CARDS --- -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Neon Space Shooter">
-    <meta name="twitter:description" content="¡Supera mi puntuación en este juego arcade retro! Juega gratis ahora.">
-    <meta name="twitter:image" content="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta name="twitter:description" content="¡Juego arcade de naves retro! Juega gratis aquí.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
 
-    <!-- --- DATOS ESTRUCTURADOS JSON-LD --- -->
+    <!-- JSON-LD -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -46,18 +42,14 @@
       "name": "Neon Space Shooter",
       "applicationCategory": "GameApplication",
       "operatingSystem": "Any",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "description": "Videojuego de disparos espaciales estilo arcade retro.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Videojuego de disparos espaciales estilo arcade retro con controles táctiles.",
       "genre": ["Arcade", "Shooter"],
       "url": "https://ferbaez.github.io/Neon-Space-Shooter/"
     }
     </script>
 
-    <!-- Fuente Retro -->
+    <!-- Fuente -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
     <style>
@@ -79,7 +71,7 @@
             overflow: hidden;
             font-family: 'Press Start 2P', cursive;
             color: #fff;
-            touch-action: none;
+            touch-action: none; /* Vital para evitar zoom/scroll al tocar botones */
             user-select: none;
             -webkit-user-select: none;
         }
@@ -92,16 +84,18 @@
             width: 100vw;
             height: 100vh;
             display: flex;
+            flex-direction: column; /* Cambiado a columna para apilar juego y controles en vertical */
             justify-content: center;
             align-items: center;
             background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
         }
 
-        /* ENVOLTORIO DEL JUEGO (Game Wrapper) */
+        /* ENVOLTORIO DEL JUEGO */
         #game-wrapper {
             position: relative;
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.1);
-            /* El tamaño se asigna por JS */
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+            /* Tamaño asignado por JS */
+            transition: width 0.3s, height 0.3s;
         }
 
         canvas {
@@ -111,10 +105,10 @@
             border: 2px solid var(--neon-blue);
             box-sizing: border-box;
             background-color: rgba(0,0,0,0.85);
-            box-shadow: 0 0 20px var(--neon-blue), inset 0 0 20px rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 15px var(--neon-blue), inset 0 0 20px rgba(0, 255, 255, 0.2);
         }
 
-        /* Capa de UI */
+        /* Capa UI dentro del juego */
         #ui-layer {
             position: absolute;
             top: 0;
@@ -122,7 +116,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            padding: 15px;
+            padding: 10px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -137,15 +131,13 @@
         }
 
         .hud-text {
-            font-size: 16px;
+            font-size: 14px;
             text-shadow: 0 0 5px var(--neon-blue);
-            letter-spacing: 1px;
         }
 
         #score-display { color: var(--neon-yellow); }
         #lives-display { color: var(--neon-green); }
 
-        /* Botón Info */
         #info-btn {
             align-self: flex-end;
             background: rgba(0, 0, 0, 0.5);
@@ -163,6 +155,61 @@
             align-items: center;
         }
 
+        /* --- CONTROLES MÓVILES --- */
+        #mobile-controls {
+            display: none; /* Oculto en PC por defecto */
+            width: 100%;
+            height: 160px; /* Espacio fijo para controles */
+            padding: 20px;
+            box-sizing: border-box;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            margin-top: 10px; /* Separación del canvas */
+        }
+
+        .control-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .control-btn {
+            width: 70px;
+            height: 70px;
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid var(--neon-blue);
+            border-radius: 50%;
+            color: var(--neon-blue);
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            user-select: none;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .control-btn:active, .control-btn.active {
+            background: var(--neon-blue);
+            color: #000;
+            transform: scale(0.95);
+        }
+
+        #btn-shoot {
+            border-color: var(--neon-red);
+            color: var(--neon-red);
+            box-shadow: 0 0 10px var(--neon-red);
+            width: 80px;
+            height: 80px;
+            font-size: 30px;
+        }
+        
+        #btn-shoot:active, #btn-shoot.active {
+            background: var(--neon-red);
+            color: #fff;
+        }
+
         /* Modales */
         .modal {
             position: absolute;
@@ -176,149 +223,93 @@
             border: 3px solid var(--neon-pink);
             box-shadow: 0 0 30px var(--neon-pink);
             z-index: 50;
-            width: 80%;
+            width: 85%;
             max-width: 400px;
             border-radius: 8px;
             display: none;
         }
         
         #start-screen { display: block; }
-
-        h1 {
-            color: var(--neon-pink);
-            text-shadow: 0 0 10px var(--neon-pink);
-            font-size: 24px;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-
-        p, li {
-            font-size: 10px;
-            color: #ccc;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        /* Estilo para listas en la ayuda (mantiene diseño limpio) */
-        ul {
-            padding-left: 15px;
-            text-align: left;
-            margin: 0;
-        }
+        
+        h1 { color: var(--neon-pink); font-size: 20px; margin-bottom: 20px; line-height: 1.5; text-shadow: 0 0 10px var(--neon-pink); }
+        p, li { font-size: 10px; color: #ccc; line-height: 1.6; margin-bottom: 15px; }
+        .enter-hint { font-size: 10px; color: #888; margin-top: 15px; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
         .btn {
-            background: transparent;
-            border: 2px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 12px 20px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
-            cursor: pointer;
-            text-shadow: 0 0 5px var(--neon-blue);
-            box-shadow: 0 0 10px var(--neon-blue), inset 0 0 5px var(--neon-blue);
-            transition: all 0.2s;
-            text-transform: uppercase;
-            width: 100%;
+            background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue);
+            padding: 12px 20px; font-family: 'Press Start 2P', cursive; font-size: 12px; cursor: pointer;
+            text-shadow: 0 0 5px var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue);
+            width: 100%; margin-top: 10px;
         }
+        .btn:hover { background: var(--neon-blue); color: #000; }
 
-        .btn:hover {
-            background: var(--neon-blue);
-            color: #000;
-        }
-        
-        /* Indicador de tecla Enter */
-        .enter-hint {
-            font-size: 10px;
-            color: #888;
-            margin-top: 15px;
-            animation: blink 1s infinite;
-            letter-spacing: 1px;
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Bloqueo de Orientación */
-        #orientation-lock {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 9999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        
-        @media screen and (orientation: portrait) {
-            #orientation-lock { display: flex; }
-            #main-container { display: none; }
+        /* Media Query para Móviles/Tablets */
+        @media (hover: none) and (pointer: coarse), (max-width: 768px) {
+            #mobile-controls { display: flex; }
+            
+            /* Ajustar layout para que quepan controles */
+            #main-container {
+                justify-content: flex-start;
+                padding-top: 20px;
+            }
+            
+            /* Asegurar que el canvas no ocupe toda la altura */
+            #game-wrapper {
+                max-height: 65vh; /* Dejar espacio abajo para botones */
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="orientation-lock">
-        <div style="font-size: 40px; margin-bottom: 20px; animation: rotate 2s infinite;">📱➡️</div>
-        <h2 style="color: var(--neon-red); margin-bottom: 10px;">GIRA TU MÓVIL</h2>
-        <p>Juego optimizado para modo horizontal.</p>
-    </div>
-
-    <!-- Contenedor Principal (Fondo) -->
     <div id="main-container">
-        
-        <!-- Envoltorio que se ajusta a la proporción del juego -->
+        <!-- Área del Juego -->
         <div id="game-wrapper">
             <canvas id="gameCanvas"></canvas>
 
-            <!-- La UI vive DENTRO del wrapper para alinearse perfectamente -->
             <div id="ui-layer">
                 <header class="hud-header">
                     <span id="score-display" class="hud-text">SCORE: 0</span>
                     <span id="lives-display" class="hud-text">LIVES: 3</span>
                 </header>
-                
-                <button id="info-btn" aria-label="Información del juego">?</button>
+                <button id="info-btn">?</button>
             </div>
 
             <!-- Modales -->
             <section id="start-screen" class="modal">
                 <h1>NEON<br>SHOOTER</h1>
-                <p>PC: Flechas + Espacio<br>Móvil: Tocar y arrastrar en cualquier lugar</p>
+                <p>MÓVIL: Usa los botones abajo<br>PC: Flechas + Espacio</p>
                 <button class="btn" id="start-btn">JUGAR</button>
-                <div class="enter-hint">[ PRESIONA ENTER ]</div>
             </section>
 
             <section id="game-over-screen" class="modal">
                 <h1 style="color: var(--neon-red);">GAME OVER</h1>
                 <p>SCORE FINAL: <span id="final-score">0</span></p>
                 <button class="btn" id="restart-btn">REINTENTAR</button>
-                <div class="enter-hint">[ PRESIONA ENTER ]</div>
             </section>
 
             <section id="info-screen" class="modal">
-                <h2 style="color: var(--neon-yellow); font-size:16px; margin-bottom:15px;">AYUDA</h2>
-                <!-- Contenido semántico enriquecido para AEO, dentro de la caja con scroll para no romper diseño -->
-                <div style="text-align: left; max-height: 150px; overflow-y: auto; padding-right: 5px;">
-                    <p><strong>Misión:</strong> Defiende tu sector de la invasión alienígena en este shooter arcade.</p>
-                    <p><strong>Controles:</strong></p>
-                    <ul>
-                        <li>Muévete con rapidez para esquivar proyectiles.</li>
-                        <li>Dispara automáticamente o pulsa para atacar.</li>
-                        <li>No permitas que las naves enemigas toquen tu base.</li>
-                    </ul>
-                    <p style="margin-top:10px;">¡Compite por la puntuación más alta!</p>
+                <h2 style="color: var(--neon-yellow); font-size:14px; margin-bottom:15px;">AYUDA</h2>
+                <div style="text-align: left; max-height: 150px; overflow-y: auto;">
+                    <p>• Mover: Flechas (Derecha)</p>
+                    <p>• Disparo: Botón Rojo (Izquierda)</p>
+                    <p>• Objetivo: Destruye todo</p>
                 </div>
-                <button class="btn" id="close-info-btn" style="margin-top:10px; border-color:var(--neon-red); color:var(--neon-red);">CERRAR</button>
+                <button class="btn" id="close-info-btn" style="border-color:var(--neon-red); color:var(--neon-red);">CERRAR</button>
             </section>
+        </div>
+
+        <!-- CONTROLES MÓVILES (Fuera del canvas) -->
+        <div id="mobile-controls">
+            <!-- Izquierda: Disparo -->
+            <button id="btn-shoot" class="control-btn">🔥</button>
+            
+            <!-- Derecha: Movimiento -->
+            <div class="control-group">
+                <button id="btn-left" class="control-btn">◀</button>
+                <button id="btn-right" class="control-btn">▶</button>
+            </div>
         </div>
     </div>
 
@@ -328,7 +319,7 @@
         const ctx = canvas.getContext('2d', { alpha: false });
         const gameWrapper = document.getElementById('game-wrapper');
         
-        // Elementos UI
+        // UI Elements
         const scoreDisplay = document.getElementById('score-display');
         const livesDisplay = document.getElementById('lives-display');
         const startScreen = document.getElementById('start-screen');
@@ -336,42 +327,56 @@
         const infoScreen = document.getElementById('info-screen');
         const finalScoreDisplay = document.getElementById('final-score');
         
-        // Resolución INTERNA del juego
+        // Botones Móviles
+        const btnLeft = document.getElementById('btn-left');
+        const btnRight = document.getElementById('btn-right');
+        const btnShoot = document.getElementById('btn-shoot');
+
+        // Constantes Juego
         const GAME_WIDTH = 800;
         const GAME_HEIGHT = 600;
         const ASPECT_RATIO = GAME_WIDTH / GAME_HEIGHT;
 
-        // Estado del juego
+        // Estado
         let gameState = 'START';
         let score = 0;
         let lives = 3;
-        let animationId;
         
-        // Colores
+        // Input Virtual
+        let keys = {
+            ArrowLeft: false,
+            ArrowRight: false,
+            Space: false,
+            Enter: false
+        };
+
         const COLORS = {
             blue: '#0ff', pink: '#f0f', green: '#0f0', 
             red: '#f00', yellow: '#ff0', white: '#fff'
         };
 
-        // --- SISTEMA DE REDIMENSIONADO INTELIGENTE ---
+        // --- RESIZE INTELIGENTE (Soporta Vertical) ---
         function resizeGame() {
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
-            
-            let newWidth = windowWidth;
-            let newHeight = windowWidth / ASPECT_RATIO;
+            const isMobile = windowWidth <= 768;
 
-            if (newHeight > windowHeight) {
-                newHeight = windowHeight;
+            // En móvil, restamos espacio para los controles (aprox 180px)
+            const availableHeight = isMobile ? windowHeight - 180 : windowHeight;
+            const availableWidth = windowWidth;
+
+            let newWidth = availableWidth;
+            let newHeight = availableWidth / ASPECT_RATIO;
+
+            if (newHeight > availableHeight) {
+                newHeight = availableHeight;
                 newWidth = newHeight * ASPECT_RATIO;
             }
 
-            const scaleFactor = 0.95;
-            newWidth *= scaleFactor;
-            newHeight *= scaleFactor;
-
-            gameWrapper.style.width = `${newWidth}px`;
-            gameWrapper.style.height = `${newHeight}px`;
+            // Margen seguridad
+            const scale = 0.96;
+            gameWrapper.style.width = `${newWidth * scale}px`;
+            gameWrapper.style.height = `${newHeight * scale}px`;
 
             canvas.width = GAME_WIDTH;
             canvas.height = GAME_HEIGHT;
@@ -386,7 +391,7 @@
 
         function playSound(type) {
             if (audioCtx.state === 'suspended') audioCtx.resume().catch(e=>{});
-            if (gameState === 'START' || gameState === 'PAUSED') return;
+            if (gameState !== 'PLAYING' && type !== 'gameover') return;
 
             const osc = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
@@ -418,76 +423,39 @@
             }
         }
 
-        // --- INPUT (CORREGIDO PARA TOCAR FUERA DEL ÁREA) ---
-        let keys = {};
-        let mouseX = GAME_WIDTH / 2;
-        let isMouseDown = false;
-        let inputMode = 'keyboard';
-
+        // --- INPUT HANDLING ---
+        // Teclado
         document.addEventListener('keydown', e => {
-            keys[e.code] = true;
-            if(['ArrowLeft','ArrowRight','Space'].includes(e.code)) inputMode = 'keyboard';
-            
-            // --- INICIAR Y REINICIAR CON ENTER ---
-            if ((gameState === 'START' || gameState === 'GAMEOVER') && e.code === 'Enter') {
-                initGame();
-            }
+            if(keys.hasOwnProperty(e.code)) keys[e.code] = true;
+            if((gameState==='START'||gameState==='GAMEOVER') && e.code==='Enter') initGame();
         });
-        document.addEventListener('keyup', e => keys[e.code] = false);
+        document.addEventListener('keyup', e => {
+            if(keys.hasOwnProperty(e.code)) keys[e.code] = false;
+        });
 
-        // Función para mapear coordenada global (pantalla completa) al canvas lógico
-        function mapGlobalToCanvas(clientX) {
-            const rect = canvas.getBoundingClientRect();
-            // Calculamos posición relativa al canvas, incluso si es negativa (fuera a la izquierda)
-            // o mayor al ancho (fuera a la derecha)
-            const relativeX = clientX - rect.left;
-            const scaleX = GAME_WIDTH / rect.width;
-            
-            let finalX = relativeX * scaleX;
+        // Controles Táctiles (Simulan Teclado)
+        function setupTouchBtn(btn, code) {
+            const activate = (e) => {
+                e.preventDefault(); // Prevenir scroll/zoom
+                keys[code] = true;
+                btn.classList.add('active');
+            };
+            const deactivate = (e) => {
+                e.preventDefault();
+                keys[code] = false;
+                btn.classList.remove('active');
+            };
 
-            // Clamping manual para que la nave no "salga" si tocas muy lejos
-            if (finalX < 0) finalX = 0;
-            if (finalX > GAME_WIDTH) finalX = GAME_WIDTH;
-            
-            return finalX;
+            btn.addEventListener('touchstart', activate, {passive: false});
+            btn.addEventListener('touchend', deactivate);
+            btn.addEventListener('mousedown', activate);
+            btn.addEventListener('mouseup', deactivate);
+            btn.addEventListener('mouseleave', deactivate);
         }
 
-        // Mouse (PC) - Sigue limitado al canvas por comodidad
-        canvas.addEventListener('mousemove', e => {
-            if(gameState === 'PLAYING') {
-                mouseX = mapGlobalToCanvas(e.clientX);
-                inputMode = 'mouse';
-            }
-        });
-        canvas.addEventListener('mousedown', () => { isMouseDown = true; inputMode = 'mouse'; });
-        canvas.addEventListener('mouseup', () => { isMouseDown = false; });
-
-        // Touch (MÓVIL GLOBAL)
-        // Usamos 'window' en lugar de 'canvas' para permitir tocar en las bandas negras
-        const handleTouch = (e) => {
-            if(e.target.tagName !== 'BUTTON') { // Evitar prevenir click en botones
-                 e.preventDefault(); 
-            }
-            const touch = e.touches[0];
-            mouseX = mapGlobalToCanvas(touch.clientX);
-            isMouseDown = true;
-            inputMode = 'mouse';
-        };
-
-        // Escuchamos en todo el documento para capturar toques fuera del juego
-        window.addEventListener('touchstart', (e) => {
-            // Solo activar juego si no es un botón de la UI
-            if (!e.target.classList.contains('btn') && !e.target.closest('button')) {
-                handleTouch(e);
-            }
-        }, {passive: false});
-        
-        window.addEventListener('touchmove', handleTouch, {passive: false});
-        
-        window.addEventListener('touchend', (e) => {
-            // No prevenimos default aquí para permitir clicks normales si fuera necesario
-            isMouseDown = false;
-        });
+        setupTouchBtn(btnLeft, 'ArrowLeft');
+        setupTouchBtn(btnRight, 'ArrowRight');
+        setupTouchBtn(btnShoot, 'Space');
 
 
         // --- ENTIDADES ---
@@ -500,18 +468,12 @@
                 this.lastShot = 0;
             }
             update() {
-                if (inputMode === 'keyboard') {
-                    if (keys['ArrowLeft'] && this.x > 0) this.x -= this.speed;
-                    if (keys['ArrowRight'] && this.x < GAME_WIDTH - this.width) this.x += this.speed;
-                } else {
-                    let targetX = mouseX - this.width/2;
-                    this.x += (targetX - this.x) * 0.2;
-                }
-                if(this.x < 0) this.x = 0;
-                if(this.x > GAME_WIDTH - this.width) this.x = GAME_WIDTH - this.width;
+                // Movimiento exclusivo por teclas (físicas o virtuales)
+                if (keys['ArrowLeft'] && this.x > 0) this.x -= this.speed;
+                if (keys['ArrowRight'] && this.x < GAME_WIDTH - this.width) this.x += this.speed;
 
                 let now = Date.now();
-                if ((keys['Space'] || isMouseDown) && now - this.lastShot > 200) {
+                if (keys['Space'] && now - this.lastShot > 200) {
                     projectiles.push(new Projectile(this.x, this.y, -12, COLORS.yellow, true));
                     projectiles.push(new Projectile(this.x+this.width, this.y, -12, COLORS.yellow, true));
                     playSound('shoot');
@@ -522,6 +484,7 @@
                 ctx.shadowColor = this.color; ctx.shadowBlur = 15;
                 ctx.strokeStyle = this.color; ctx.lineWidth = 2;
                 ctx.strokeRect(this.x, this.y, this.width, this.height);
+                // Alas
                 ctx.beginPath();
                 ctx.moveTo(this.x, this.y+this.height);
                 ctx.lineTo(this.x-10, this.y+this.height+10);
@@ -589,7 +552,7 @@
             }
         }
 
-        // --- GAME LOOP ---
+        // --- GAME LOGIC ---
         let player;
         let enemies = [];
         let projectiles = [];
@@ -637,16 +600,12 @@
                     e.x += (1.5 + score*0.001) * enemyDir;
                     if(e.x <= 10 || e.x >= GAME_WIDTH-40) hitEdge = true;
                     
-                    // --- CONDICIÓN DE DERROTA POR INVASIÓN ---
                     if (e.y + e.height >= player.y) {
-                        lives = 0;
-                        livesDisplay.innerText = `LIVES: 0`;
-                        gameState = 'GAMEOVER';
-                        playSound('gameover');
+                        lives = 0; livesDisplay.innerText = `LIVES: 0`;
+                        gameState = 'GAMEOVER'; playSound('gameover');
                         gameOverScreen.style.display = 'block';
                         finalScoreDisplay.innerText = score;
                     }
-
                     e.draw();
                 });
                 if(hitEdge) { enemyDir *= -1; enemies.forEach(e => e.y+=20); }
