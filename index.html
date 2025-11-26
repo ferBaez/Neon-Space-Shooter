@@ -384,9 +384,7 @@
         /* Dispositivos Táctiles o Pantallas Pequeñas */
         @media (max-width: 1024px),
         (hover: none) and (pointer: coarse) {
-            #mobile-controls {
-                display: flex !important;
-            }
+            /* Eliminado display: flex !important; se controla por JS */
         }
 
         /* Móvil Vertical (Portrait) */
@@ -396,10 +394,19 @@
                 padding-top: 20px;
             }
 
+            /* Ajuste Logo Portrait */
+            #start-screen img {
+                max-height: 20vh;
+                /* Limitar altura */
+                width: auto;
+                max-width: 80%;
+            }
+
             /* Bajar controles en vertical */
             #mobile-controls {
                 padding-bottom: 0;
                 margin-bottom: -60px;
+                transform: translateY(60px);
             }
         }
 
@@ -485,21 +492,22 @@
                 display: none !important;
             }
 
-            /* Controles Landscape - Z-INDEX MÁXIMO */
+            /* Controles Landscape - VISIBILIDAD GESTIONADA POR JS */
             #mobile-controls {
                 position: fixed;
                 bottom: 20px;
                 left: 0;
                 width: 100%;
-                height: 0;
+                height: 100%;
+                /* Restaurar altura completa para clicks */
                 margin: 0;
                 padding: 0 40px;
                 pointer-events: none;
-                display: flex !important;
+                /* display: flex; <-- SE ELIMINA !important, JS lo controla */
                 align-items: flex-end;
                 justify-content: space-between;
-                z-index: 30000;
-                /* Superior al modal si fuera necesario, pero modal oculta juego */
+                z-index: 100;
+                /* Z-index normal, debajo del modal */
             }
 
             /* Asegurar que los botones sean clickeables */
@@ -940,7 +948,7 @@
             let powerups = [];
             let enemyDir = 1;
 
-            function initGame() {
+            function startGame() {
                 // Solicitar Pantalla Completa (Mejora de Inmersión)
                 if (document.documentElement.requestFullscreen) {
                     document.documentElement.requestFullscreen().catch(err => console.log(err));
@@ -951,11 +959,31 @@
                 livesDisplay.innerText = `LIVES: ${lives}`;
                 startScreen.style.display = 'none';
                 gameOverScreen.style.display = 'none';
+                infoScreen.style.display = 'none';
+
+                // Mostrar controles solo al jugar y si es móvil
+                if (isMobileDevice) {
+                    document.getElementById('mobile-controls').style.display = 'flex';
+                }
 
                 player = new Player();
-                projectiles = []; particles = []; powerups = [];
-                initEnemies();
+                projectiles = [];
+                enemies = []; // Reset enemies here, initEnemies will populate
+                particles = [];
+                powerups = [];
+                initEnemies(); // Call initEnemies to populate
                 if (audioCtx.state === 'suspended') audioCtx.resume();
+                // animate(); // animate is called once at the end of the script
+            }
+
+            function endGame() {
+                gameState = 'GAMEOVER'; // Ensure game state is set
+                finalScoreDisplay.innerText = score;
+                gameOverScreen.style.display = 'block';
+                // Ocultar controles al terminar
+                if (isMobileDevice) { // Only hide if they were shown
+                    document.getElementById('mobile-controls').style.display = 'none';
+                }
             }
 
             function initEnemies() {
