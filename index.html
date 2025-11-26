@@ -161,8 +161,12 @@
         #info-btn {
             position: absolute;
             top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 10px;
+            /* Mover a la derecha */
+            left: auto;
+            /* Quitar centrado */
+            transform: none;
+            /* Quitar transform */
             background: rgba(0, 0, 0, 0.6);
             border: 2px solid var(--neon-blue);
             color: var(--neon-blue);
@@ -185,6 +189,15 @@
             transform: scale(1.1);
             box-shadow: 0 0 15px var(--neon-blue);
             background: rgba(0, 255, 255, 0.1);
+        }
+
+        /* Asegurar que el logo no se corte en móviles */
+        #start-screen img {
+            max-width: 80%;
+            /* Reducir ancho máximo */
+            height: auto;
+            object-fit: contain;
+            /* Asegurar proporción */
         }
 
         /* --- FOOTER PREMIUM --- */
@@ -427,8 +440,8 @@
             /* Controles más arriba */
             #mobile-controls {
                 position: absolute;
-                bottom: 120px;
-                /* Subir controles 20px más (total 120px) */
+                bottom: 130px;
+                /* Subir controles 10px más (total 130px) */
                 left: 0;
                 width: 100%;
                 height: 100%;
