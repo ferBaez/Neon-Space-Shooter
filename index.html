@@ -1,42 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
     <!-- --- SEO & AEO --- -->
     <title>Neon Space Shooter | Juego Arcade Gratis</title>
-    <meta name="description" content="Juego arcade de naves espaciales. Dispara y esquiva en este clásico estilo neón. Controles táctiles optimizados para móvil.">
+    <meta name="description"
+        content="Juego arcade de naves espaciales. Dispara y esquiva en este clásico estilo neón. Controles táctiles optimizados para móvil.">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Ferbaez">
-    
-    <!-- URL CANÓNICA ACTUALIZADA -->
+
+    <!-- PWA / MOBILE APP CAPABILITY -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+
     <link rel="canonical" href="https://ferbaez.github.io/Neon-Space-Shooter">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
 
     <!-- --- OPEN GRAPH --- -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Neon Space Shooter 🚀">
     <meta property="og:description" content="Juego arcade de naves. ¡Juega ahora en tu móvil o PC!">
     <meta property="og:site_name" content="Neon Space Shooter">
-    <!-- URL OPEN GRAPH ACTUALIZADA -->
     <meta property="og:url" content="https://ferbaez.github.io/Neon-Space-Shooter">
-    
-    <!-- IMAGEN PREVIA (COHETE ESPACIAL) -->
-    <meta property="og:image" content="https://images.unsplash.com/photo-1517976487492-5750f3195933?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
-    <meta property="og:image:secure_url" content="https://images.unsplash.com/photo-1517976487492-5750f3195933?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
-    <meta property="og:image:type" content="image/jpeg">
+
+    <!-- IMAGEN PREVIA -->
+    <meta property="og:image" content="game_preview.png">
+    <meta property="og:image:secure_url" content="game_preview.png">
+    <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Cohete espacial despegando">
+    <meta property="og:image:alt" content="Neon Space Shooter Gameplay Preview">
 
     <!-- --- TWITTER CARDS --- -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Neon Space Shooter">
     <meta name="twitter:description" content="¡Juego arcade de naves retro! Juega gratis aquí.">
-    <meta name="twitter:image" content="https://images.unsplash.com/photo-1517976487492-5750f3195933?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta name="twitter:image" content="game_preview.png">
 
-    <!-- JSON-LD ACTUALIZADO -->
+    <!-- JSON-LD -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -64,7 +72,8 @@
             --bg-color: #050505;
         }
 
-        body, html {
+        body,
+        html {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -76,6 +85,8 @@
             touch-action: none;
             user-select: none;
             -webkit-user-select: none;
+            /* Deshabilitar resaltado azul al tocar en móviles */
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* Fondo general */
@@ -97,7 +108,7 @@
             position: relative;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
             transition: width 0.3s, height 0.3s;
-            z-index: 1; /* Asegura que el juego esté en una capa base */
+            z-index: 1;
         }
 
         canvas {
@@ -106,8 +117,10 @@
             height: 100%;
             border: 2px solid var(--neon-blue);
             box-sizing: border-box;
-            background-color: rgba(0,0,0,0.85);
+            background-color: rgba(0, 0, 0, 0.85);
             box-shadow: 0 0 15px var(--neon-blue), inset 0 0 20px rgba(0, 255, 255, 0.2);
+            /* Optimización renderizado para pixel art */
+            image-rendering: pixelated;
         }
 
         /* Capa UI dentro del juego */
@@ -137,40 +150,57 @@
             text-shadow: 0 0 5px var(--neon-blue);
         }
 
-        #score-display { color: var(--neon-yellow); }
-        #lives-display { color: var(--neon-green); }
+        #score-display {
+            color: var(--neon-yellow);
+        }
+
+        #lives-display {
+            color: var(--neon-green);
+        }
 
         #info-btn {
-            align-self: flex-end;
-            background: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
             border: 2px solid var(--neon-blue);
             color: var(--neon-blue);
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             font-family: 'Press Start 2P', cursive;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             pointer-events: auto;
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 20;
+            box-shadow: 0 0 10px var(--neon-blue);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        /* --- FOOTER PREMIUM (Alta Visibilidad) --- */
+        #info-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--neon-blue);
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        /* --- FOOTER PREMIUM --- */
         #game-footer {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background-color: rgba(5, 5, 5, 0.95); /* Fondo oscuro sólido */
-            border-top: 2px solid var(--neon-blue); /* Borde brillante */
-            box-shadow: 0 -5px 20px rgba(0, 255, 255, 0.15); /* Resplandor superior */
+            background-color: rgba(5, 5, 5, 0.95);
+            border-top: 2px solid var(--neon-blue);
+            box-shadow: 0 -5px 20px rgba(0, 255, 255, 0.15);
             padding: 12px 0;
             text-align: center;
-            font-size: 10px; /* Tamaño legible */
+            font-size: 10px;
             color: #ddd;
-            z-index: 1000; /* Siempre encima */
+            z-index: 1000;
             font-family: 'Press Start 2P', cursive;
             text-transform: uppercase;
             display: flex;
@@ -182,7 +212,7 @@
         }
 
         #game-footer a {
-            color: var(--neon-yellow); /* Enlaces en amarillo neón */
+            color: var(--neon-yellow);
             text-decoration: none;
             pointer-events: auto;
             transition: all 0.3s ease;
@@ -196,33 +226,37 @@
             border-bottom: 1px dashed var(--neon-pink);
         }
 
-        .footer-sep { color: #555; margin: 0 2px; }
+        .footer-sep {
+            color: #555;
+            margin: 0 2px;
+        }
 
-        /* Responsive del Footer */
         @media (max-width: 600px) {
             #game-footer {
                 font-size: 8px;
-                flex-direction: column; /* Apilar en móviles muy estrechos */
+                flex-direction: column;
                 gap: 5px;
                 padding: 10px 0;
             }
-            .footer-sep { display: none; } /* Ocultar separador en vertical */
+
+            .footer-sep {
+                display: none;
+            }
         }
 
-
-        /* --- CONTROLES MÓVILES (ESTILO BASE) --- */
+        /* --- CONTROLES MÓVILES --- */
         #mobile-controls {
-            display: none; /* Se activa con media queries */
+            display: none;
             width: 100%;
-            height: 160px; /* Altura por defecto en vertical */
+            height: 160px;
             padding: 20px;
             box-sizing: border-box;
             justify-content: space-between;
             align-items: center;
             z-index: 100;
             margin-top: 10px;
-            /* Padding bottom extra para que el footer no tape los botones */
-            padding-bottom: 60px; 
+            padding-bottom: 60px;
+            /* Ajustado para el footer */
         }
 
         .control-group {
@@ -233,7 +267,7 @@
         .control-btn {
             width: 70px;
             height: 70px;
-            background: rgba(0, 255, 255, 0.15); /* Un poco más visible */
+            background: rgba(0, 255, 255, 0.1);
             border: 2px solid var(--neon-blue);
             border-radius: 50%;
             color: var(--neon-blue);
@@ -245,13 +279,16 @@
             user-select: none;
             cursor: pointer;
             box-shadow: 0 0 10px var(--neon-blue);
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(4px);
+            transition: transform 0.1s;
         }
 
-        .control-btn:active, .control-btn.active {
+        .control-btn:active,
+        .control-btn.active {
             background: var(--neon-blue);
             color: #000;
-            transform: scale(0.95);
+            transform: scale(0.90);
+            box-shadow: 0 0 20px var(--neon-blue);
         }
 
         #btn-shoot {
@@ -262,10 +299,12 @@
             height: 80px;
             font-size: 30px;
         }
-        
-        #btn-shoot:active, #btn-shoot.active {
+
+        #btn-shoot:active,
+        #btn-shoot.active {
             background: var(--neon-red);
             color: #fff;
+            box-shadow: 0 0 20px var(--neon-red);
         }
 
         /* Modales */
@@ -286,42 +325,97 @@
             border-radius: 8px;
             display: none;
         }
-        
-        #start-screen { display: block; }
-        
-        h1 { color: var(--neon-pink); font-size: 20px; margin-bottom: 20px; line-height: 1.5; text-shadow: 0 0 10px var(--neon-pink); }
-        p, li { font-size: 10px; color: #ccc; line-height: 1.6; margin-bottom: 15px; }
-        .enter-hint { font-size: 10px; color: #888; margin-top: 15px; animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        #start-screen {
+            display: block;
+        }
+
+        h1 {
+            color: var(--neon-pink);
+            font-size: 20px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        p,
+        li {
+            font-size: 10px;
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Mejora específica para instrucciones de inicio */
+        #start-screen p {
+            font-size: 12px;
+            color: #fff;
+            margin: 15px 0 25px 0;
+            text-shadow: 0 0 2px var(--neon-blue);
+            line-height: 2;
+            font-weight: bold;
+        }
+
+        .enter-hint {
+            font-size: 10px;
+            color: #888;
+            margin-top: 15px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
 
         .btn {
-            background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue);
-            padding: 12px 20px; font-family: 'Press Start 2P', cursive; font-size: 12px; cursor: pointer;
-            text-shadow: 0 0 5px var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue);
-            width: 100%; margin-top: 10px;
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 12px 20px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            cursor: pointer;
+            text-shadow: 0 0 5px var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+            width: 100%;
+            margin-top: 10px;
         }
-        .btn:hover { background: var(--neon-blue); color: #000; }
 
-        /* --- RESPONSIVIDAD AVANZADA --- */
-        
-        /* Regla universal para activar controles en móviles/tablets (ancho menor a 1024px) O dispositivos táctiles */
-        @media (max-width: 1024px), (hover: none) and (pointer: coarse) {
-            #mobile-controls { display: flex !important; }
+        .btn:hover {
+            background: var(--neon-blue);
+            color: #000;
         }
 
-        /* Móvil Vertical (Portrait) - Los controles se quedan abajo */
+        /* --- RESPONSIVIDAD AVANZADA (LAYOUTS) --- */
+
+        /* Dispositivos Táctiles o Pantallas Pequeñas */
+        @media (max-width: 1024px),
+        (hover: none) and (pointer: coarse) {
+            #mobile-controls {
+                display: flex !important;
+            }
+        }
+
+        /* Móvil Vertical (Portrait) */
         @media (max-width: 1024px) and (orientation: portrait) {
             #main-container {
                 justify-content: flex-start;
                 padding-top: 20px;
             }
-            /* El juego deja espacio abajo para los controles */
         }
 
-        /* Móvil Horizontal (Landscape) - Los controles FLOTAN a los lados */
+        /* Móvil Horizontal (Landscape) */
         @media (max-width: 1024px) and (orientation: landscape) {
             #main-container {
-                flex-direction: row; 
+                flex-direction: row;
                 justify-content: center;
                 padding: 0;
             }
@@ -333,23 +427,33 @@
                 width: 100%;
                 height: 100%;
                 margin: 0;
-                /* Ajustamos para que los botones suban y no toquen el footer */
-                padding: 0 50px 70px 50px; 
-                pointer-events: none; 
-                align-items: flex-end; 
+                /* Padding ajustado para Landscape + Footer */
+                padding: 0 50px 70px 50px;
+                pointer-events: none;
+                align-items: flex-end;
                 background: transparent;
             }
 
             .control-btn {
-                pointer-events: auto; 
-                opacity: 0.85; 
+                pointer-events: auto;
+                opacity: 0.85;
             }
-            
-            /* Ajuste de tamaño para landscape */
-            .control-btn { width: 65px; height: 65px; font-size: 22px; margin-bottom: 0; } 
-            #btn-shoot { width: 75px; height: 75px; font-size: 28px; }
-            
-            /* Footer en landscape: más compacto */
+
+            /* Tamaño ajustado para landscape */
+            .control-btn {
+                width: 65px;
+                height: 65px;
+                font-size: 22px;
+                margin-bottom: 0;
+            }
+
+            #btn-shoot {
+                width: 75px;
+                height: 75px;
+                font-size: 28px;
+            }
+
+            /* Footer compacto */
             #game-footer {
                 padding: 5px 0;
                 font-size: 8px;
@@ -357,10 +461,10 @@
         }
     </style>
 </head>
+
 <body>
 
     <div id="main-container">
-        <!-- Área del Juego -->
         <div id="game-wrapper">
             <canvas id="gameCanvas"></canvas>
 
@@ -374,7 +478,8 @@
 
             <!-- Modales -->
             <section id="start-screen" class="modal">
-                <h1>NEON<br>SHOOTER</h1>
+                <img src="logo.png" alt="Neon Shooter Logo"
+                    style="max-width: 40%; height: auto; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--neon-pink));">
                 <p>MÓVIL: Usa los botones<br>PC: Flechas + Espacio</p>
                 <button class="btn" id="start-btn">JUGAR</button>
                 <div class="enter-hint">[ ENTER ]</div>
@@ -393,7 +498,8 @@
                     <p>• Disparo: Botón Rojo (Izquierda)</p>
                     <p>• Objetivo: Destruye todo</p>
                 </div>
-                <button class="btn" id="close-info-btn" style="border-color:var(--neon-red); color:var(--neon-red);">CERRAR</button>
+                <button class="btn" id="close-info-btn"
+                    style="border-color:var(--neon-red); color:var(--neon-red);">CERRAR</button>
             </section>
         </div>
 
@@ -401,7 +507,7 @@
         <div id="mobile-controls">
             <!-- Izquierda: Disparo -->
             <button id="btn-shoot" class="control-btn">🔥</button>
-            
+
             <!-- Derecha: Movimiento -->
             <div class="control-group">
                 <button id="btn-left" class="control-btn">◀</button>
@@ -410,10 +516,11 @@
         </div>
     </div>
 
-    <!-- FOOTER VISIBLE Y FUNCIONAL -->
+    <!-- FOOTER -->
     <footer id="game-footer">
         <span>Todos los derechos reservados a</span>
-        <a href="https://studio--hitsterai.us-central1.hosted.app/es" target="_blank" title="Visitar Hitster Ai">Hitster Ai</a>
+        <a href="https://studio--hitsterai.us-central1.hosted.app/es" target="_blank" title="Visitar Hitster Ai">Hitster
+            Ai</a>
         <span class="footer-sep">|</span>
         <a href="mailto:baez@hitster.page" title="Enviar correo">Contáctanos</a>
     </footer>
@@ -423,31 +530,27 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d', { alpha: false });
         const gameWrapper = document.getElementById('game-wrapper');
-        
-        // UI Elements
+
         const scoreDisplay = document.getElementById('score-display');
         const livesDisplay = document.getElementById('lives-display');
         const startScreen = document.getElementById('start-screen');
         const gameOverScreen = document.getElementById('game-over-screen');
         const infoScreen = document.getElementById('info-screen');
         const finalScoreDisplay = document.getElementById('final-score');
-        
-        // Botones Móviles
+        const startBtn = document.getElementById('start-btn');
+
         const btnLeft = document.getElementById('btn-left');
         const btnRight = document.getElementById('btn-right');
         const btnShoot = document.getElementById('btn-shoot');
 
-        // Constantes Juego
         const GAME_WIDTH = 800;
         const GAME_HEIGHT = 600;
         const ASPECT_RATIO = GAME_WIDTH / GAME_HEIGHT;
 
-        // Estado
         let gameState = 'START';
         let score = 0;
         let lives = 3;
-        
-        // Input Virtual
+
         let keys = {
             ArrowLeft: false,
             ArrowRight: false,
@@ -456,26 +559,21 @@
         };
 
         const COLORS = {
-            blue: '#0ff', pink: '#f0f', green: '#0f0', 
+            blue: '#0ff', pink: '#f0f', green: '#0f0',
             red: '#f00', yellow: '#ff0', white: '#fff'
         };
 
-        // --- RESIZE INTELIGENTE ---
+        // --- RESIZE INTELIGENTE (HIGH DPI SUPPORT) ---
         function resizeGame() {
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
-            
-            // Detectar si es móvil basado en ancho o user agent/touch (simple)
-            // Se considera móvil si es < 1024px de ancho
+
             const isMobile = windowWidth <= 1024;
             const isPortrait = windowHeight > windowWidth;
 
-            // Espacio reservado para controles:
-            // Solo restamos altura si es móvil y está en VERTICAL.
-            // En horizontal, los controles flotan (overlay), así que usamos toda la altura.
             let controlsHeight = 0;
             if (isMobile && isPortrait) {
-                controlsHeight = 160; // Altura del div #mobile-controls
+                controlsHeight = 160;
             }
 
             const availableHeight = windowHeight - controlsHeight;
@@ -489,27 +587,40 @@
                 newWidth = newHeight * ASPECT_RATIO;
             }
 
-            // Margen seguridad
             const scale = 0.96;
-            gameWrapper.style.width = `${newWidth * scale}px`;
-            gameWrapper.style.height = `${newHeight * scale}px`;
+            const cssWidth = newWidth * scale;
+            const cssHeight = newHeight * scale;
 
-            canvas.width = GAME_WIDTH;
-            canvas.height = GAME_HEIGHT;
+            gameWrapper.style.width = `${cssWidth}px`;
+            gameWrapper.style.height = `${cssHeight}px`;
+
+            // --- HIGH DPI SCALING ---
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = GAME_WIDTH * dpr;
+            canvas.height = GAME_HEIGHT * dpr;
+
+            // Normalizamos el contexto para usar siempre las coordenadas lógicas (800x600)
+            ctx.scale(dpr, dpr);
         }
 
         window.addEventListener('resize', resizeGame);
-        // Llamar resize un poco después por si el navegador tarda en rotar
         window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
         resizeGame();
 
-        // --- AUDIO ---
+        // --- AUDIO & HAPTICS ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioCtx = new AudioContext();
 
         function playSound(type) {
-            if (audioCtx.state === 'suspended') audioCtx.resume().catch(e=>{});
+            if (audioCtx.state === 'suspended') audioCtx.resume().catch(e => { });
             if (gameState !== 'PLAYING' && type !== 'gameover') return;
+
+            // Feedback Háptico (Vibración)
+            if (navigator.vibrate) {
+                if (type === 'shoot') navigator.vibrate(10); // Vibración muy corta
+                if (type === 'explosion') navigator.vibrate(100);
+                if (type === 'gameover') navigator.vibrate([100, 50, 100]);
+            }
 
             const osc = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
@@ -541,20 +652,18 @@
             }
         }
 
-        // --- INPUT HANDLING ---
-        // Teclado
+        // --- INPUT ---
         document.addEventListener('keydown', e => {
-            if(keys.hasOwnProperty(e.code)) keys[e.code] = true;
-            if((gameState==='START'||gameState==='GAMEOVER') && e.code==='Enter') initGame();
+            if (keys.hasOwnProperty(e.code)) keys[e.code] = true;
+            if ((gameState === 'START' || gameState === 'GAMEOVER') && e.code === 'Enter') initGame();
         });
         document.addEventListener('keyup', e => {
-            if(keys.hasOwnProperty(e.code)) keys[e.code] = false;
+            if (keys.hasOwnProperty(e.code)) keys[e.code] = false;
         });
 
-        // Controles Táctiles (Simulan Teclado)
         function setupTouchBtn(btn, code) {
             const activate = (e) => {
-                e.preventDefault(); 
+                e.preventDefault();
                 keys[code] = true;
                 btn.classList.add('active');
             };
@@ -564,8 +673,7 @@
                 btn.classList.remove('active');
             };
 
-            // Soporte mixto mouse/touch para pruebas
-            btn.addEventListener('touchstart', activate, {passive: false});
+            btn.addEventListener('touchstart', activate, { passive: false });
             btn.addEventListener('touchend', deactivate);
             btn.addEventListener('mousedown', activate);
             btn.addEventListener('mouseup', deactivate);
@@ -576,25 +684,23 @@
         setupTouchBtn(btnRight, 'ArrowRight');
         setupTouchBtn(btnShoot, 'Space');
 
-
         // --- ENTIDADES ---
         class Player {
             constructor() {
                 this.width = 40; this.height = 40;
-                this.x = GAME_WIDTH/2 - 20; this.y = GAME_HEIGHT - 70;
+                this.x = GAME_WIDTH / 2 - 20; this.y = GAME_HEIGHT - 70;
                 this.speed = 8;
                 this.color = COLORS.blue;
                 this.lastShot = 0;
             }
             update() {
-                // Movimiento exclusivo por teclas (físicas o virtuales)
                 if (keys['ArrowLeft'] && this.x > 0) this.x -= this.speed;
                 if (keys['ArrowRight'] && this.x < GAME_WIDTH - this.width) this.x += this.speed;
 
                 let now = Date.now();
                 if (keys['Space'] && now - this.lastShot > 200) {
                     projectiles.push(new Projectile(this.x, this.y, -12, COLORS.yellow, true));
-                    projectiles.push(new Projectile(this.x+this.width, this.y, -12, COLORS.yellow, true));
+                    projectiles.push(new Projectile(this.x + this.width, this.y, -12, COLORS.yellow, true));
                     playSound('shoot');
                     this.lastShot = now;
                 }
@@ -603,13 +709,12 @@
                 ctx.shadowColor = this.color; ctx.shadowBlur = 15;
                 ctx.strokeStyle = this.color; ctx.lineWidth = 2;
                 ctx.strokeRect(this.x, this.y, this.width, this.height);
-                // Alas
                 ctx.beginPath();
-                ctx.moveTo(this.x, this.y+this.height);
-                ctx.lineTo(this.x-10, this.y+this.height+10);
+                ctx.moveTo(this.x, this.y + this.height);
+                ctx.lineTo(this.x - 10, this.y + this.height + 10);
                 ctx.stroke();
-                ctx.moveTo(this.x+this.width, this.y+this.height);
-                ctx.lineTo(this.x+this.width+10, this.y+this.height+10);
+                ctx.moveTo(this.x + this.width, this.y + this.height);
+                ctx.lineTo(this.x + this.width + 10, this.y + this.height + 10);
                 ctx.stroke();
                 ctx.shadowBlur = 0;
             }
@@ -620,21 +725,21 @@
                 this.x = x; this.y = y;
                 this.width = 30; this.height = 30;
                 this.type = type;
-                if(type===1) { this.color = COLORS.red; this.points = 50; }
-                else if(type===2) { this.color = COLORS.pink; this.points = 30; }
+                if (type === 1) { this.color = COLORS.red; this.points = 50; }
+                else if (type === 2) { this.color = COLORS.pink; this.points = 30; }
                 else { this.color = COLORS.green; this.points = 10; }
             }
             draw() {
                 ctx.shadowColor = this.color; ctx.shadowBlur = 10;
                 ctx.strokeStyle = this.color; ctx.lineWidth = 2;
-                if(this.type===1) {
-                    ctx.beginPath(); ctx.moveTo(this.x,this.y); 
-                    ctx.lineTo(this.x+this.width,this.y); 
-                    ctx.lineTo(this.x+this.width/2,this.y+this.height); ctx.closePath(); ctx.stroke();
-                } else if(this.type===2) {
-                    ctx.beginPath(); ctx.arc(this.x+15,this.y+15,15,0,Math.PI*2); ctx.stroke();
+                if (this.type === 1) {
+                    ctx.beginPath(); ctx.moveTo(this.x, this.y);
+                    ctx.lineTo(this.x + this.width, this.y);
+                    ctx.lineTo(this.x + this.width / 2, this.y + this.height); ctx.closePath(); ctx.stroke();
+                } else if (this.type === 2) {
+                    ctx.beginPath(); ctx.arc(this.x + 15, this.y + 15, 15, 0, Math.PI * 2); ctx.stroke();
                 } else {
-                    ctx.strokeRect(this.x,this.y,this.width,this.height);
+                    ctx.strokeRect(this.x, this.y, this.width, this.height);
                 }
                 ctx.shadowBlur = 0;
             }
@@ -647,7 +752,7 @@
             }
             update() {
                 this.y += this.speed;
-                if(this.y < -20 || this.y > GAME_HEIGHT+20) this.del = true;
+                if (this.y < -20 || this.y > GAME_HEIGHT + 20) this.del = true;
             }
             draw() {
                 ctx.fillStyle = this.color;
@@ -660,10 +765,10 @@
         class Particle {
             constructor(x, y, c) {
                 this.x = x; this.y = y; this.color = c;
-                this.vx = (Math.random()-0.5)*8; this.vy = (Math.random()-0.5)*8;
+                this.vx = (Math.random() - 0.5) * 8; this.vy = (Math.random() - 0.5) * 8;
                 this.life = 1;
             }
-            update() { this.x+=this.vx; this.y+=this.vy; this.life-=0.04; }
+            update() { this.x += this.vx; this.y += this.vy; this.life -= 0.04; }
             draw() {
                 ctx.globalAlpha = Math.max(0, this.life);
                 ctx.fillStyle = this.color; ctx.fillRect(this.x, this.y, 3, 3);
@@ -671,40 +776,45 @@
             }
         }
 
-        // --- GAME LOGIC ---
+        // --- GAME LOOP ---
         let player;
         let enemies = [];
         let projectiles = [];
         let particles = [];
         let enemyDir = 1;
-        
+
         function initGame() {
+            // Solicitar Pantalla Completa (Mejora de Inmersión)
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(err => console.log(err));
+            }
+
             score = 0; lives = 3; gameState = 'PLAYING';
             scoreDisplay.innerText = `SCORE: ${score}`;
             livesDisplay.innerText = `LIVES: ${lives}`;
             startScreen.style.display = 'none';
             gameOverScreen.style.display = 'none';
-            
+
             player = new Player();
             projectiles = []; particles = [];
             initEnemies();
-            if(audioCtx.state === 'suspended') audioCtx.resume();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
         }
 
         function initEnemies() {
             enemies = [];
-            let startX = (GAME_WIDTH - (8*50))/2;
-            for(let r=0; r<4; r++) {
-                for(let c=0; c<8; c++) {
-                    let t = (r===0)?1:(r===1?2:3);
-                    enemies.push(new Enemy(startX + c*50, 50 + r*50, t));
+            let startX = (GAME_WIDTH - (8 * 50)) / 2;
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 8; c++) {
+                    let t = (r === 0) ? 1 : (r === 1 ? 2 : 3);
+                    enemies.push(new Enemy(startX + c * 50, 50 + r * 50, t));
                 }
             }
         }
 
         function checkCol(a, b) {
-            return (a.x < b.x + (b.width||b.w) && a.x + (a.width||a.w) > b.x &&
-                    a.y < b.y + (b.height||b.h) && a.y + (a.height||a.h) > b.y);
+            return (a.x < b.x + (b.width || b.w) && a.x + (a.width || a.w) > b.x &&
+                a.y < b.y + (b.height || b.h) && a.y + (a.height || a.h) > b.y);
         }
 
         function animate() {
@@ -716,9 +826,9 @@
 
                 let hitEdge = false;
                 enemies.forEach(e => {
-                    e.x += (1.5 + score*0.001) * enemyDir;
-                    if(e.x <= 10 || e.x >= GAME_WIDTH-40) hitEdge = true;
-                    
+                    e.x += (1.5 + score * 0.001) * enemyDir;
+                    if (e.x <= 10 || e.x >= GAME_WIDTH - 40) hitEdge = true;
+
                     if (e.y + e.height >= player.y) {
                         lives = 0; livesDisplay.innerText = `LIVES: 0`;
                         gameState = 'GAMEOVER'; playSound('gameover');
@@ -727,11 +837,11 @@
                     }
                     e.draw();
                 });
-                if(hitEdge) { enemyDir *= -1; enemies.forEach(e => e.y+=20); }
+                if (hitEdge) { enemyDir *= -1; enemies.forEach(e => e.y += 20); }
 
-                if(Math.random()<0.02 && enemies.length>0) {
-                    let e = enemies[Math.floor(Math.random()*enemies.length)];
-                    projectiles.push(new Projectile(e.x+15, e.y+30, 5, COLORS.red, false));
+                if (Math.random() < 0.02 && enemies.length > 0) {
+                    let e = enemies[Math.floor(Math.random() * enemies.length)];
+                    projectiles.push(new Projectile(e.x + 15, e.y + 30, 5, COLORS.red, false));
                 }
 
                 projectiles.forEach(p => p.update());
@@ -743,37 +853,38 @@
                 particles.forEach(p => p.draw());
 
                 projectiles.forEach(p => {
-                    if(p.isPlayer) {
+                    if (p.isPlayer) {
                         enemies.forEach((e, i) => {
-                            if(checkCol(p, e)) {
+                            if (checkCol(p, e)) {
                                 score += e.points; scoreDisplay.innerText = `SCORE: ${score}`;
-                                for(let k=0;k<8;k++) particles.push(new Particle(e.x+15, e.y+15, e.color));
+                                for (let k = 0; k < 8; k++) particles.push(new Particle(e.x + 15, e.y + 15, e.color));
                                 enemies.splice(i, 1); p.del = true; playSound('explosion');
                             }
                         });
                     } else {
-                        if(checkCol(p, {x:player.x+10, y:player.y+10, w:20, h:20})) {
+                        if (checkCol(p, { x: player.x + 10, y: player.y + 10, w: 20, h: 20 })) {
                             lives--; livesDisplay.innerText = `LIVES: ${lives}`;
                             p.del = true; playSound('explosion');
-                            for(let k=0;k<10;k++) particles.push(new Particle(player.x+20, player.y+20, COLORS.blue));
-                            if(lives<=0) { gameState = 'GAMEOVER'; playSound('gameover'); gameOverScreen.style.display='block'; finalScoreDisplay.innerText=score; }
+                            for (let k = 0; k < 10; k++) particles.push(new Particle(player.x + 20, player.y + 20, COLORS.blue));
+                            if (lives <= 0) { gameState = 'GAMEOVER'; playSound('gameover'); gameOverScreen.style.display = 'block'; finalScoreDisplay.innerText = score; }
                         }
                     }
                 });
 
-                if(enemies.length===0) initEnemies();
+                if (enemies.length === 0) initEnemies();
             }
 
             requestAnimationFrame(animate);
         }
 
-        document.getElementById('start-btn').onclick = initGame;
+        startBtn.onclick = initGame;
         document.getElementById('restart-btn').onclick = initGame;
-        document.getElementById('info-btn').onclick = () => { infoScreen.style.display='block'; gameState='PAUSED'; };
-        document.getElementById('close-info-btn').onclick = () => { infoScreen.style.display='none'; gameState='PLAYING'; };
+        document.getElementById('info-btn').onclick = () => { infoScreen.style.display = 'block'; gameState = 'PAUSED'; };
+        document.getElementById('close-info-btn').onclick = () => { infoScreen.style.display = 'none'; gameState = 'PLAYING'; };
 
         animate();
 
     </script>
 </body>
+
 </html>
