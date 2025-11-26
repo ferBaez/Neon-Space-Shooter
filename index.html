@@ -662,11 +662,9 @@
                 osc.frequency.exponentialRampToValueAtTime(800, now + 0.2);
                 gainNode.gain.setValueAtTime(0.1, now);
                 gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-                osc.start(now); osc.stop(now + 0.2);
             }
         }
 
-        // --- INPUT ---
         // --- INPUT ---
         document.addEventListener('keydown', e => {
             if (keys.hasOwnProperty(e.code)) keys[e.code] = true;
@@ -680,14 +678,51 @@
             if (e.key === ' ' || e.code === 'Space') keys['Space'] = false;
         });
 
-        // ... (setupTouchBtn se mantiene igual) ...
+        // --- MEJORA DE CONTROLES TÁCTILES ---
+        function setupTouchBtn(btn, code) {
+            const activate = (e) => {
+                if (e.cancelable) e.preventDefault();
+                keys[code] = true;
+                btn.classList.add('active');
+            };
+            const deactivate = (e) => {
+                if (e.cancelable) e.preventDefault();
+                keys[code] = false;
+                btn.classList.remove('active');
+            };
+
+            // Usar eventos táctiles directos para mejor respuesta
+            btn.addEventListener('touchstart', activate, { passive: false });
+            btn.addEventListener('touchend', deactivate, { passive: false });
+            btn.addEventListener('touchcancel', deactivate, { passive: false });
+
+            // Fallback para ratón (PC)
+            btn.addEventListener('mousedown', activate);
+            btn.addEventListener('mouseup', deactivate);
+            btn.addEventListener('mouseleave', deactivate);
+        }
+
+        // Mejorar respuesta del botón de inicio en móviles
+        const handleStart = (e) => {
+            if (e.cancelable && e.type === 'touchstart') e.preventDefault();
+            initGame();
+        };
+        startBtn.addEventListener('touchstart', handleStart, { passive: false });
+        startBtn.addEventListener('click', handleStart);
+        document.getElementById('restart-btn').addEventListener('touchstart', handleStart, { passive: false });
+        document.getElementById('restart-btn').addEventListener('click', handleStart);
+
+        setupTouchBtn(btnLeft, 'ArrowLeft');
+        setupTouchBtn(btnRight, 'ArrowRight');
+        setupTouchBtn(btnShoot, 'Space');
 
         // --- ENTIDADES ---
         class Player {
             constructor() {
                 this.width = 40; this.height = 40;
+                this.x = GAME_WIDTH / 2 - 20; // Restaurado: Posición X inicial
                 // Ajuste de posición para mejor visibilidad (más arriba del footer/controles)
-                this.y = GAME_HEIGHT - 120;
+                this.y = GAME_HEIGHT - 80;
                 this.speed = 8;
                 this.color = COLORS.blue;
                 this.lastShot = 0;
