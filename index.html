@@ -398,8 +398,12 @@
             #start-screen img {
                 max-height: 20vh;
                 /* Limitar altura */
-                width: auto;
-                max-width: 80%;
+                width: 100%;
+                /* Ocupar ancho disponible */
+                max-width: 300px;
+                /* Limitar ancho máximo absoluto */
+                object-fit: contain;
+                /* Asegurar que se vea completo */
             }
 
             /* Bajar controles en vertical */
@@ -495,33 +499,30 @@
             /* Controles Landscape - VISIBILIDAD GESTIONADA POR JS */
             #mobile-controls {
                 position: fixed;
-                bottom: 20px;
+                bottom: 30px;
+                /* Subir 10px más (de 20 a 30) */
                 left: 0;
                 width: 100%;
                 height: 100%;
-                /* Restaurar altura completa para clicks */
                 margin: 0;
                 padding: 0 40px;
                 pointer-events: none;
-                /* display: flex; <-- SE ELIMINA !important, JS lo controla */
                 align-items: flex-end;
                 justify-content: space-between;
                 z-index: 100;
-                /* Z-index normal, debajo del modal */
             }
 
-            /* Asegurar que los botones sean clickeables */
             .control-btn {
                 pointer-events: auto;
                 width: 80px;
                 height: 80px;
                 margin-bottom: 20px;
                 background: rgba(0, 0, 0, 0.5);
-                /* Fondo oscuro para contraste */
             }
 
             .control-group {
-                margin-left: 20px;
+                margin-left: 30px;
+                /* Mover 10px más a la derecha (de 20 a 30) */
                 display: flex;
                 gap: 20px;
             }
