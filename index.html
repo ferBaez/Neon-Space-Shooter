@@ -755,7 +755,7 @@
                 this.width = 40; this.height = 40;
                 this.x = GAME_WIDTH / 2 - 20; // Restaurado: Posición X inicial
                 // Ajuste de posición para mejor visibilidad (más arriba del footer/controles)
-                this.y = GAME_HEIGHT - 60;
+                this.y = GAME_HEIGHT - 50;
                 this.speed = 8;
                 this.color = COLORS.blue;
                 this.lastShot = 0;
@@ -979,12 +979,14 @@
                 // Colisión Player - Powerup
                 powerups.forEach(p => {
                     if (checkCol(p, { x: player.x, y: player.y, w: player.width, h: player.height })) {
-                        lives++;
-                        livesDisplay.innerText = `LIVES: ${lives}`;
-                        playSound('powerup');
+                        if (lives < 3) { // Límite de 3 vidas
+                            lives++;
+                            livesDisplay.innerText = `LIVES: ${lives}`;
+                            playSound('powerup');
+                            // Efecto visual
+                            for (let k = 0; k < 5; k++) particles.push(new Particle(player.x + 20, player.y + 20, '#0f0'));
+                        }
                         p.del = true;
-                        // Efecto visual
-                        for (let k = 0; k < 5; k++) particles.push(new Particle(player.x + 20, player.y + 20, '#0f0'));
                     }
                 });
 
