@@ -418,54 +418,85 @@
                 flex-direction: row;
                 justify-content: center;
                 padding: 0;
+                align-items: center;
             }
 
-            /* Ajuste de Modal para Landscape (evitar corte vertical) */
+            /* Modal optimizado para landscape: Diseño horizontal */
             .modal {
-                padding: 10px;
-                width: 70%;
-                max-width: 500px;
+                padding: 10px 20px;
+                width: 80%;
+                max-width: 600px;
+                height: auto;
+                max-height: 90vh;
                 border-width: 2px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-around;
+                gap: 20px;
+            }
+
+            /* Contenedor interno para logo y título */
+            .modal-header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 40%;
+            }
+
+            /* Contenedor interno para instrucciones y botón */
+            .modal-content {
+                width: 55%;
+                text-align: left;
             }
 
             #start-screen img {
-                max-width: 25% !important;
-                /* Logo más pequeño */
+                max-width: 80px !important;
+                /* Logo fijo pequeño */
                 margin-bottom: 5px !important;
             }
 
+            #start-screen h1 {
+                font-size: 16px;
+                margin: 5px 0;
+            }
+
             #start-screen p {
-                margin: 5px 0 10px 0;
-                line-height: 1.4;
+                margin: 5px 0;
+                line-height: 1.3;
                 font-size: 10px;
+                text-align: left;
             }
 
             .btn {
                 padding: 8px 15px;
-                margin-top: 5px;
-                font-size: 10px;
+                margin-top: 10px;
+                font-size: 12px;
+                width: auto;
+                /* Botón no ocupa todo el ancho */
+                display: inline-block;
             }
 
             .enter-hint {
-                margin-top: 5px;
                 display: none;
-                /* Ocultar hint de enter en móvil */
             }
 
-            /* Footer oculto en landscape para más espacio */
+            /* Footer oculto */
             #game-footer {
                 display: none !important;
             }
 
+            /* Controles más arriba */
             #mobile-controls {
                 position: absolute;
-                bottom: 0;
+                bottom: 20px;
+                /* Subir controles */
                 left: 0;
                 width: 100%;
                 height: 100%;
                 margin: 0;
-                /* Padding ajustado: Botones en las esquinas inferiores */
-                padding: 0 20px 20px 20px;
+                padding: 0 40px;
+                /* Padding lateral */
                 pointer-events: none;
                 align-items: flex-end;
                 background: transparent;
@@ -474,16 +505,16 @@
             .control-btn {
                 pointer-events: auto;
                 opacity: 0.85;
-                width: 65px;
-                height: 65px;
-                font-size: 22px;
+                width: 60px;
+                height: 60px;
+                font-size: 20px;
                 margin-bottom: 0;
             }
 
             #btn-shoot {
-                width: 75px;
-                height: 75px;
-                font-size: 28px;
+                width: 70px;
+                height: 70px;
+                font-size: 26px;
             }
         }
     </style>
@@ -504,13 +535,18 @@
             </div>
 
             <!-- Modales -->
-            <section id="start-screen" class="modal">
-                <img src="logo.png" alt="Neon Shooter Logo"
-                    style="max-width: 40%; height: auto; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--neon-pink));">
-                <p>MÓVIL: Usa los botones<br>PC: Flechas + Espacio</p>
-                <button class="btn" id="start-btn">JUGAR</button>
-                <div class="enter-hint">[ ENTER ]</div>
-            </section>
+            <div id="start-screen" class="modal">
+                <div class="modal-header">
+                    <img src="logo.png" alt="Neon Space Shooter Logo"
+                        style="max-width: 60%; margin-bottom: 15px; filter: drop-shadow(0 0 10px #ff00ff);">
+                    <h1>NEON SPACE SHOOTER</h1>
+                </div>
+                <div class="modal-content">
+                    <p>MóVIL: Usa los botones<br>PC: Flechas + Espacio</p>
+                    <button id="start-btn" class="btn">JUGAR</button>
+                    <p class="enter-hint">PRESS ENTER TO START</p>
+                </div>
+            </div>
 
             <section id="game-over-screen" class="modal">
                 <h1 style="color: var(--neon-red);">GAME OVER</h1>
