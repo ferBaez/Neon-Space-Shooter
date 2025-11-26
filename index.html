@@ -661,24 +661,39 @@
             if (keys.hasOwnProperty(e.code)) keys[e.code] = false;
         });
 
+        // --- MEJORA DE CONTROLES TÁCTILES ---
         function setupTouchBtn(btn, code) {
             const activate = (e) => {
-                e.preventDefault();
+                if (e.cancelable) e.preventDefault();
                 keys[code] = true;
                 btn.classList.add('active');
             };
             const deactivate = (e) => {
-                e.preventDefault();
+                if (e.cancelable) e.preventDefault();
                 keys[code] = false;
                 btn.classList.remove('active');
             };
 
+            // Usar eventos táctiles directos para mejor respuesta
             btn.addEventListener('touchstart', activate, { passive: false });
-            btn.addEventListener('touchend', deactivate);
+            btn.addEventListener('touchend', deactivate, { passive: false });
+            btn.addEventListener('touchcancel', deactivate, { passive: false });
+
+            // Fallback para ratón (PC)
             btn.addEventListener('mousedown', activate);
             btn.addEventListener('mouseup', deactivate);
             btn.addEventListener('mouseleave', deactivate);
         }
+
+        // Mejorar respuesta del botón de inicio en móviles
+        const handleStart = (e) => {
+            if (e.cancelable && e.type === 'touchstart') e.preventDefault();
+            initGame();
+        };
+        startBtn.addEventListener('touchstart', handleStart, { passive: false });
+        startBtn.addEventListener('click', handleStart);
+        document.getElementById('restart-btn').addEventListener('touchstart', handleStart, { passive: false });
+        document.getElementById('restart-btn').addEventListener('click', handleStart);
 
         setupTouchBtn(btnLeft, 'ArrowLeft');
         setupTouchBtn(btnRight, 'ArrowRight');
@@ -877,8 +892,6 @@
             requestAnimationFrame(animate);
         }
 
-        startBtn.onclick = initGame;
-        document.getElementById('restart-btn').onclick = initGame;
         document.getElementById('info-btn').onclick = () => { infoScreen.style.display = 'block'; gameState = 'PAUSED'; };
         document.getElementById('close-info-btn').onclick = () => { infoScreen.style.display = 'none'; gameState = 'PLAYING'; };
 
