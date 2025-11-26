@@ -427,8 +427,8 @@
             /* Controles más arriba */
             #mobile-controls {
                 position: absolute;
-                bottom: 100px;
-                /* Subir controles 50px más (total 100px) */
+                bottom: 120px;
+                /* Subir controles 20px más (total 120px) */
                 left: 0;
                 width: 100%;
                 height: 100%;
@@ -439,110 +439,10 @@
                 background: transparent;
             }
 
-            /* Móvil Horizontal (Landscape) */
-            @media (max-width: 1024px) and (orientation: landscape) {
-                #main-container {
-                    flex-direction: row;
-                    justify-content: center;
-                    padding: 0;
-                    align-items: center;
-                }
-
-                /* Modal optimizado para landscape: Diseño horizontal */
-                .modal {
-                    padding: 10px 20px;
-                    width: 80%;
-                    max-width: 600px;
-                    height: auto;
-                    max-height: 90vh;
-                    border-width: 2px;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    justify-content: space-around;
-                    gap: 20px;
-                }
-
-                /* Contenedor interno para logo y título */
-                .modal-header {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    width: 40%;
-                }
-
-                /* Contenedor interno para instrucciones y botón */
-                .modal-content {
-                    width: 55%;
-                    text-align: left;
-                }
-
-                #start-screen img {
-                    max-width: 80px !important;
-                    /* Logo fijo pequeño */
-                    margin-bottom: 5px !important;
-                }
-
-                #start-screen h1 {
-                    font-size: 16px;
-                    margin: 5px 0;
-                }
-
-                #start-screen p {
-                    margin: 5px 0;
-                    line-height: 1.3;
-                    font-size: 10px;
-                    text-align: left;
-                }
-
-                .btn {
-                    padding: 8px 15px;
-                    margin-top: 10px;
-                    font-size: 12px;
-                    width: auto;
-                    /* Botón no ocupa todo el ancho */
-                    display: inline-block;
-                }
-
-                .enter-hint {
-                    display: none;
-                }
-
-                /* Footer oculto */
-                #game-footer {
-                    display: none !important;
-                }
-
-                /* Controles más arriba */
-                #mobile-controls {
-                    position: absolute;
-                    bottom: 50px;
-                    /* Subir controles aún más */
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    margin: 0;
-                    padding: 0 40px;
-                    /* Padding lateral */
-                    pointer-events: none;
-                    align-items: flex-end;
-                    background: transparent;
-                }
-
-                .control-btn {
-                    pointer-events: auto;
-                    opacity: 0.85;
-                    width: 60px;
-                    height: 60px;
-                    font-size: 20px;
-                    margin-bottom: 0;
-                }
-
-                #btn-shoot {
-                    width: 70px;
-                    height: 70px;
-                    font-size: 26px;
-                }
+            /* Mover flechas a la derecha */
+            .control-group {
+                margin-left: 20px;
+                /* Mover flechas 20px a la derecha */
             }
     </style>
 </head>
