@@ -453,10 +453,23 @@
                 font-size: 28px;
             }
 
-            /* Footer compacto */
+            /* Footer oculto en landscape para más espacio */
             #game-footer {
-                padding: 5px 0;
-                font-size: 8px;
+                display: none;
+            }
+
+            #mobile-controls {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                /* Padding ajustado: Botones en las esquinas inferiores */
+                padding: 0 20px 20px 20px;
+                pointer-events: none;
+                align-items: flex-end;
+                background: transparent;
             }
         }
     </style>
@@ -575,9 +588,15 @@
             const isPortrait = windowHeight > windowWidth;
 
             // Altura reservada para controles y footer
-            let reservedHeight = 50; // Footer siempre presente
-            if (isMobileDevice && isPortrait) {
-                reservedHeight += 160; // Controles móviles en vertical
+            let reservedHeight = 50; // Footer por defecto
+
+            if (isMobileDevice) {
+                if (isPortrait) {
+                    reservedHeight += 160; // Controles verticales
+                } else {
+                    // En Landscape móvil, ocultamos footer y controles son overlay
+                    reservedHeight = 0;
+                }
             }
 
             const availableHeight = windowHeight - reservedHeight;
