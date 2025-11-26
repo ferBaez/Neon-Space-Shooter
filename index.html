@@ -400,133 +400,124 @@
             #mobile-controls {
                 padding-bottom: 0;
                 margin-bottom: -60px;
+            }
+        }
 
-                /* Móvil Horizontal (Landscape) */
-                @media (max-width: 1024px) and (orientation: landscape) {
-                    #main-container {
-                        flex-direction: row;
-                        justify-content: center;
-                        padding: 0;
-                        align-items: center;
-                        width: 100vw;
-                        height: 100vh;
-                        overflow: hidden;
-                    }
+        /* Móvil Horizontal (Landscape) - RECONSTRUCCIÓN MINIMALISTA */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            #main-container {
+                flex-direction: row;
+                justify-content: center;
+                padding: 0;
+                align-items: center;
+                width: 100vw;
+                height: 100vh;
+                overflow: hidden;
+            }
 
-                    /* Modal Full Screen Flex para asegurar visibilidad */
-                    .modal {
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        max-width: none;
-                        max-height: none;
-                        border: none;
-                        border-radius: 0;
-                        background: rgba(0, 0, 0, 0.9);
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 30px;
-                        padding: 20px;
-                        box-sizing: border-box;
-                        transform: none;
-                        /* Reset transform */
-                    }
+            /* Modal Full Screen Flex */
+            .modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                max-width: none;
+                max-height: none;
+                border: none;
+                border-radius: 0;
+                background: rgba(0, 0, 0, 0.95);
+                display: flex;
+                flex-direction: column;
+                /* Columna para centrar todo */
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+                padding: 20px;
+                box-sizing: border-box;
+                transform: none;
+                z-index: 20000;
+                /* Z-index superior a todo */
+            }
 
-                    .modal-header {
-                        width: 40%;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                    }
+            .modal-header,
+            .modal-content {
+                width: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
 
-                    .modal-content {
-                        width: 40%;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                    }
+            /* OCULTAR LOGO Y TEXTO EN LANDSCAPE PARA PRIORIZAR JUEGO */
+            #start-screen img {
+                display: none !important;
+            }
 
-                    /* Logo controlado por altura de pantalla */
-                    #start-screen img {
-                        max-height: 30vh !important;
-                        /* Máximo 30% de la altura */
-                        width: auto !important;
-                        max-width: 100% !important;
-                        margin-bottom: 10px !important;
-                    }
+            #start-screen p {
+                display: none !important;
+            }
 
-                    #start-screen h1 {
-                        font-size: 4vh;
-                        /* Texto relativo a altura */
-                        margin: 5px 0;
-                    }
+            .enter-hint {
+                display: none !important;
+            }
 
-                    #start-screen p {
-                        font-size: 3vh;
-                        margin: 10px 0;
-                    }
+            /* Título visible */
+            #start-screen h1 {
+                font-size: 24px;
+                margin: 0 0 20px 0;
+                color: var(--neon-pink);
+            }
 
-                    .btn {
-                        font-size: 3vh;
-                        padding: 10px 20px;
-                        margin-top: 10px;
-                    }
+            /* Botones grandes y visibles */
+            .btn {
+                font-size: 20px;
+                padding: 15px 40px;
+                margin: 10px;
+                display: block !important;
+                width: auto;
+                background: rgba(0, 255, 255, 0.1);
+                border: 2px solid var(--neon-blue);
+            }
 
-                    /* Ocultar hint de enter */
-                    .enter-hint {
-                        display: none;
-                    }
+            /* Footer oculto */
+            #game-footer {
+                display: none !important;
+            }
 
-                    /* Footer oculto */
-                    #game-footer {
-                        display: none !important;
-                    }
+            /* Controles Landscape - Z-INDEX MÁXIMO */
+            #mobile-controls {
+                position: fixed;
+                bottom: 20px;
+                left: 0;
+                width: 100%;
+                height: 0;
+                margin: 0;
+                padding: 0 40px;
+                pointer-events: none;
+                display: flex !important;
+                align-items: flex-end;
+                justify-content: space-between;
+                z-index: 30000;
+                /* Superior al modal si fuera necesario, pero modal oculta juego */
+            }
 
-                    /* Controles Landscape - Asegurar capa superior */
-                    #mobile-controls {
-                        position: fixed;
-                        /* Fixed para asegurar posición */
-                        bottom: 20px;
-                        left: 0;
-                        width: 100%;
-                        height: 0;
-                        /* Altura 0 para no bloquear toques en el centro */
-                        margin: 0;
-                        padding: 0 40px;
-                        pointer-events: none;
-                        /* Permitir clicks a través del contenedor */
-                        display: flex !important;
-                        align-items: flex-end;
-                        justify-content: space-between;
-                        z-index: 9999;
-                        /* Z-index máximo */
-                        overflow: visible;
-                        /* Permitir que los botones se salgan */
-                    }
+            /* Asegurar que los botones sean clickeables */
+            .control-btn {
+                pointer-events: auto;
+                width: 80px;
+                height: 80px;
+                margin-bottom: 20px;
+                background: rgba(0, 0, 0, 0.5);
+                /* Fondo oscuro para contraste */
+            }
 
-                    .control-btn {
-                        pointer-events: auto;
-                        /* Reactivar clicks en botones */
-                        width: 15vw;
-                        /* Tamaño relativo al ancho */
-                        height: 15vw;
-                        max-width: 70px;
-                        max-height: 70px;
-                        margin-bottom: 20px;
-                        /* Margen inferior seguro */
-                    }
-
-                    .control-group {
-                        margin-left: 20px;
-                        display: flex;
-                        gap: 20px;
-                    }
-                }
+            .control-group {
+                margin-left: 20px;
+                display: flex;
+                gap: 20px;
+            }
+        }
     </style>
 </head>
 
