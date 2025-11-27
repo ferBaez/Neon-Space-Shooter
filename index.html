@@ -307,6 +307,10 @@
             z-index: 50;
             width: 85%;
             max-width: 400px;
+            max-height: 85vh;
+            /* Limitar altura para evitar cortes */
+            overflow-y: auto;
+            /* Scroll si es necesario */
             border-radius: 8px;
             display: none;
         }
@@ -392,6 +396,11 @@
             #main-container {
                 justify-content: flex-start;
                 padding-top: 20px;
+            }
+
+            /* Bajar un poco el modal para que no se corte arriba */
+            .modal {
+                top: 55%;
             }
 
             /* Ajuste Logo Portrait - CORRECCIÓN DEFINITIVA */
