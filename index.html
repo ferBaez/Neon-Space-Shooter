@@ -90,18 +90,55 @@
         background: #0ff;
         border-radius: 4px;
       }
+      #root:empty::before {
+        content: 'Cargando Motor...';
+        color: #0ff;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 12px;
+        animation: blink 1s infinite;
+      }
+      @keyframes blink { 50% { opacity: 0.5; } }
     </style>
-  <script type="importmap">
+
+    <!-- Import Map using public ESM.sh CDN for better GitHub compatibility -->
+    <script type="importmap">
 {
   "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
   }
 }
 </script>
 </head>
   <body>
     <div id="root"></div>
+    
+    <!-- Explicit Entry Point for Bundlers/Browsers -->
+    <script type="module" src="./index.tsx"></script>
+
+    <!-- Error Handler for debugging Black Screens on GitHub -->
+    <script>
+      window.addEventListener('error', function(e) {
+        // Ignore resizing errors often thrown by canvas
+        if (e.message && e.message.includes('ResizeObserver')) return;
+        
+        console.error("Global Error:", e);
+        const root = document.getElementById('root');
+        // Only show error if app hasn't loaded (root is empty or loading)
+        if (root && (!root.children.length || root.innerText.includes('Cargando'))) {
+          root.innerHTML = '<div style="color:#ff5555; padding:20px; text-align:center; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center;">' +
+            '<h2 style="margin-bottom:10px;">⚠ Error de Inicialización</h2>' +
+            '<p style="font-size:10px; max-width:80%; line-height:1.5;">' + e.message + '</p>' +
+            '<p style="font-size:9px; color:#888; margin-top:20px;">Nota: Si ves esto en GitHub Pages, asegúrate de que el código ha sido compilado (Built) ya que los navegadores no ejecutan JSX/TSX directamente.</p>' +
+            '</div>';
+        }
+      });
+    </script>
   </body>
 </html>
