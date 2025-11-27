@@ -624,6 +624,13 @@
                 background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
                 padding-bottom: 30px;
                 /* Espacio extra para gestos de iOS */
+                pointer-events: none;
+                /* CRÍTICO: Permitir clicks en elementos debajo (como el menú) */
+            }
+
+            /* Asegurar que los botones sean clickeables */
+            #mobile-controls button {
+                pointer-events: auto;
             }
 
             /* Ajuste Logo Portrait */
