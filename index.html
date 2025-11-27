@@ -1,85 +1,86 @@
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
-    
-    <!-- --- SEO --- -->
-    <title>Neon Space Shooter | Juego Arcade Gratis por Hitster Ai</title>
-    <meta name="description" content="Juego arcade de naves estilo neón. Juega gratis en tu navegador." />
-    <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#000000" />
+import React, { useCallback } from 'react';
+import { InputState } from '../types';
 
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
-    
-    <!-- Tailwind & Fonts -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    
-    <style>
-      body { margin: 0; background-color: #050505; overflow: hidden; touch-action: none; font-family: 'Press Start 2P', cursive; }
-      #loading-screen { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #0ff; z-index: 9999; }
-      .blink { animation: blink 1s infinite; }
-      @keyframes blink { 50% { opacity: 0.5; } }
-      #error-log { color: #ff0055; font-family: monospace; padding: 20px; text-align: center; display: none; max-width: 80%; background: rgba(50,0,0,0.8); border: 1px solid red; margin-top: 20px; }
-    </style>
-
-    <!-- CRITICAL: Clean Import Map (Only esm.sh dev versions for better debugging) -->
-    <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@18.2.0?dev",
-    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?dev",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/"
-  }
+interface ControlsProps {
+  inputRef: React.MutableRefObject<InputState>;
+  className?: string;
+  btnSizeClass?: string;
 }
-</script>
-    
-    <!-- Babel for on-the-fly compilation -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  </head>
-  <body>
-    <div id="root"></div>
-    
-    <div id="loading-screen">
-      <div class="blink">CARGANDO MOTOR...</div>
-      <div id="error-log"></div>
-    </div>
 
-    <script>
-      window.onerror = function(msg, url, line, col, error) {
-        const log = document.getElementById('error-log');
-        const loading = document.querySelector('.blink');
-        if(loading) loading.style.display = 'none';
-        if(log) {
-          log.style.display = 'block';
-          // Try to get more info from the error object if possible
-          let details = "";
-          if(error && error.stack) details = "<br><small>" + error.stack + "</small>";
-          log.innerHTML = "ERROR:<br>" + msg + "<br><small>" + url + ":" + line + "</small>" + details;
-        }
-        return false;
-      };
-      
-      // Remove loading screen when React mounts
-      window.addEventListener('load', () => {
-        let attempts = 0;
-        const checkRoot = setInterval(() => {
-          attempts++;
-          const root = document.getElementById('root');
-          if (root && root.childElementCount > 0) {
-            document.getElementById('loading-screen').style.display = 'none';
-            clearInterval(checkRoot);
-          }
-          // Stop checking after 10 seconds
-          if (attempts > 100) clearInterval(checkRoot);
-        }, 100);
-      });
-    </script>
-    
-    <!-- Main Game Logic -->
-    <script type="text/babel" data-type="module" data-presets="react,typescript" src="./index.tsx"></script>
-  </body>
-</html>
+// Reusable styling
+const btnBase = "rounded-full border-2 bg-white/5 backdrop-blur-md flex items-center justify-center text-2xl select-none transition-all touch-none active:scale-90 shadow-lg";
+
+export const ShootButton: React.FC<ControlsProps> = ({ inputRef, className = '', btnSizeClass = "w-20 h-20 sm:w-24 sm:h-24" }) => {
+  const handleTouch = useCallback((active: boolean) => (e: React.TouchEvent | React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    inputRef.current.shoot = active;
+    if (active && navigator.vibrate) navigator.vibrate(10);
+  }, [inputRef]);
+
+  return (
+    <button
+      className={`${btnBase} ${btnSizeClass} border-red-500/50 text-red-500 shadow-red-900/20 active:bg-red-500 active:text-white ${className}`}
+      onMouseDown={handleTouch(true)}
+      onMouseUp={handleTouch(false)}
+      onMouseLeave={handleTouch(false)}
+      onTouchStart={handleTouch(true)}
+      onTouchEnd={handleTouch(false)}
+      aria-label="Shoot"
+    >
+      🔥
+    </button>
+  );
+};
+
+export const DPad: React.FC<ControlsProps> = ({ inputRef, className = '', btnSizeClass = "w-20 h-20 sm:w-24 sm:h-24" }) => {
+  const handleTouch = useCallback((key: 'left' | 'right', active: boolean) => (e: React.TouchEvent | React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    inputRef.current[key] = active;
+    if (active && navigator.vibrate) navigator.vibrate(10);
+  }, [inputRef]);
+
+  return (
+    <div className={`flex gap-4 ${className}`}>
+      <button
+        className={`${btnBase} ${btnSizeClass} border-cyan-400/50 text-cyan-400 shadow-cyan-900/20 active:bg-cyan-400 active:text-black`}
+        onMouseDown={handleTouch('left', true)}
+        onMouseUp={handleTouch('left', false)}
+        onMouseLeave={handleTouch('left', false)}
+        onTouchStart={handleTouch('left', true)}
+        onTouchEnd={handleTouch('left', false)}
+        aria-label="Move Left"
+      >
+        ◀
+      </button>
+      <button
+        className={`${btnBase} ${btnSizeClass} border-cyan-400/50 text-cyan-400 shadow-cyan-900/20 active:bg-cyan-400 active:text-black`}
+        onMouseDown={handleTouch('right', true)}
+        onMouseUp={handleTouch('right', false)}
+        onMouseLeave={handleTouch('right', false)}
+        onTouchStart={handleTouch('right', true)}
+        onTouchEnd={handleTouch('right', false)}
+        aria-label="Move Right"
+      >
+        ▶
+      </button>
+    </div>
+  );
+};
+
+// Default composite component for Portrait mode
+const MobileControls: React.FC<ControlsProps> = (props) => {
+  return (
+    <div className={`flex justify-between items-center w-full px-8 py-4 ${props.className || ''}`}>
+      <div className="pointer-events-auto">
+        <ShootButton {...props} />
+      </div>
+      <div className="pointer-events-auto">
+        <DPad {...props} />
+      </div>
+    </div>
+  );
+};
+
+export default MobileControls;
