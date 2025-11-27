@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
 
-// --- 1. TYPES & CONSTANTS ---
+// --- 1. CONFIGURACIÓN Y TIPOS ---
 
 enum GameState {
   START = 'START',
@@ -29,7 +29,7 @@ const COLORS = {
 const GAME_WIDTH = 800;
 const GAME_HEIGHT = 600;
 
-// --- 2. AUDIO SERVICE ---
+// --- 2. SERVICIO DE AUDIO ---
 
 class AudioService {
   private ctx: AudioContext | null = null;
@@ -93,14 +93,14 @@ class AudioService {
         osc.stop(now + 0.3);
       }
     } catch (e) {
-      // Ignore audio errors if user hasn't interacted
+      // Ignorar errores de audio si el navegador es muy estricto
     }
   }
 }
 
 const audioService = new AudioService();
 
-// --- 3. GAME LOGIC ---
+// --- 3. CLASES DEL JUEGO (ENTIDADES) ---
 
 class GameObject {
   x: number;
@@ -279,9 +279,8 @@ class Particle extends GameObject {
   }
 }
 
-// --- 4. REACT COMPONENTS ---
+// --- 4. COMPONENTES DE UI ---
 
-// 4.1 Button Component
 const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'danger' }> = ({ children, variant = 'primary', className = '', ...props }) => {
   const baseStyles = "font-['Press_Start_2P'] uppercase text-xs sm:text-sm py-3 px-6 border-2 transition-all transform active:scale-95 shadow-[0_0_10px_currentColor]";
   const variants = {
@@ -292,7 +291,7 @@ const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { variant
   return <button className={`${baseStyles} ${variants[variant]} ${className}`} {...props}>{children}</button>;
 };
 
-// 4.2 Logo Component
+// Logo SVG Incrustado
 const NeonRocketLogo: React.FC<{ className?: string }> = ({ className }) => (
   <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M50 5 L50 5 Q65 30 65 60 L50 55 L35 60 Q35 30 50 5 Z" stroke="#ff00ff" strokeWidth="2" fill="rgba(255, 0, 255, 0.1)" className="drop-shadow-[0_0_5px_#f0f]" />
@@ -304,7 +303,7 @@ const NeonRocketLogo: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
-// 4.3 Mobile Controls
+// Controles Táctiles
 const btnBase = "rounded-full border-2 bg-white/5 backdrop-blur-md flex items-center justify-center text-2xl select-none transition-all touch-none active:scale-90 shadow-lg";
 
 const ShootButton: React.FC<{ inputRef: React.MutableRefObject<InputState>, btnSizeClass?: string }> = ({ inputRef, btnSizeClass = "w-20 h-20" }) => {
@@ -333,7 +332,8 @@ const DPad: React.FC<{ inputRef: React.MutableRefObject<InputState>, className?:
   </div>;
 };
 
-// 4.4 Game Canvas Component
+// --- 5. COMPONENTE CANVAS DEL JUEGO ---
+
 const GameCanvas: React.FC<{
   gameState: GameState;
   setGameState: (s: GameState) => void;
@@ -508,7 +508,7 @@ const GameCanvas: React.FC<{
   return <canvas ref={canvasRef} width={GAME_WIDTH} height={GAME_HEIGHT} className="w-full h-full block object-contain" style={{ imageRendering: 'pixelated' }} />;
 };
 
-// --- 5. MAIN APP COMPONENT ---
+// --- 6. APP PRINCIPAL ---
 
 const App: React.FC = () => {
   const [gameState, setGameState] = useState<GameState>(GameState.START);
@@ -557,12 +557,14 @@ const App: React.FC = () => {
     <div className="fixed inset-0 bg-[#080808] flex items-center justify-center overflow-hidden touch-none select-none">
       <div className={`relative w-full h-full flex items-center justify-center ${isMobile ? 'flex-col landscape:flex-row landscape:justify-between landscape:px-8 lg:landscape:px-16' : 'p-4'}`}>
         
+        {/* LANDSCAPE CONTROLS: LEFT */}
         {isMobile && gameState === GameState.PLAYING && (
           <div className="hidden landscape:flex flex-col justify-center items-center h-full z-20 w-24 shrink-0 animate-in fade-in duration-300">
              <DPad inputRef={inputRef} btnSizeClass="w-16 h-16 lg:w-20 lg:h-20" className="gap-2" />
           </div>
         )}
 
+        {/* SCREEN WRAPPER */}
         <div className={`relative bg-black shadow-[0_0_30px_rgba(0,0,0,0.8)] border-2 border-[#1a1a1a] overflow-hidden shrink-0 transition-all duration-300 aspect-[4/3] w-full h-auto max-h-[60vh] landscape:w-auto landscape:h-[92vh] landscape:max-h-none md:h-[85vh] md:w-auto`}>
           <GameCanvas gameState={gameState} setGameState={setGameState} setScore={setScore} setLives={setLives} inputRef={inputRef} />
 
@@ -577,8 +579,8 @@ const App: React.FC = () => {
                 <NeonRocketLogo className="w-32 h-32 mb-4 animate-bounce" />
                 <h1 className="text-3xl sm:text-5xl lg:text-6xl text-fuchsia-500 mb-6 drop-shadow-[0_0_15px_#f0f] tracking-tighter leading-tight">NEON<br/>SPACE<br/>SHOOTER</h1>
                 <div className="flex flex-col gap-4 w-full max-w-[200px]">
-                  <Button onClick={startGame}>START</Button>
-                  <Button variant="secondary" onClick={() => setShowInfo(true)}>HELP</Button>
+                  <Button onClick={startGame}>JUGAR</Button>
+                  <Button variant="secondary" onClick={() => setShowInfo(true)}>AYUDA</Button>
                 </div>
               </div>
             )}
@@ -586,24 +588,23 @@ const App: React.FC = () => {
             {gameState === GameState.GAMEOVER && (
               <div className="absolute inset-0 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center text-center pointer-events-auto p-4 z-20">
                 <h2 className="text-4xl sm:text-6xl text-red-600 mb-4 drop-shadow-[0_0_20px_red] tracking-tighter">GAME OVER</h2>
-                <p className="text-white mb-8 text-sm sm:text-lg tracking-widest">FINAL SCORE: <span className="text-yellow-400 block text-2xl mt-2">{score}</span></p>
-                <Button onClick={startGame}>RETRY</Button>
+                <p className="text-white mb-8 text-sm sm:text-lg tracking-widest">PUNTAJE: <span className="text-yellow-400 block text-2xl mt-2">{score}</span></p>
+                <Button onClick={startGame}>REINTENTAR</Button>
               </div>
             )}
 
             {showInfo && (
               <div className="absolute inset-0 bg-black/95 flex flex-col items-center justify-center text-center pointer-events-auto p-6 z-30">
-                <h2 className="text-lg text-yellow-400 mb-4 border-b border-yellow-400 pb-2 tracking-widest uppercase">How to Play</h2>
+                <h2 className="text-lg text-yellow-400 mb-4 border-b border-yellow-400 pb-2 tracking-widest uppercase">Instrucciones</h2>
                 <div className="text-left space-y-3 text-[10px] sm:text-xs text-gray-300 mb-6 max-w-xs leading-relaxed font-mono">
-                    <p>• <span className="text-white">Objective:</span> Destroy all enemy waves.</p>
-                    <p>• <span className="text-fuchsia-400">Enemies:</span> Triangles drop <span className="text-green-400">Extra Lives</span>!</p>
-                    <p>• <span className="text-red-400">Danger:</span> Don't get hit or let them pass.</p>
+                    <p>• <span className="text-white">Objetivo:</span> Destruye las naves enemigas.</p>
+                    <p>• <span className="text-fuchsia-400">Bonus:</span> Los triángulos sueltan <span className="text-green-400">Vidas</span>.</p>
                     <div className="mt-4 pt-4 border-t border-gray-800 opacity-75">
-                      <p>PC: Arrows to Move, Space to Shoot</p>
-                      <p>Mobile: Use on-screen controls</p>
+                      <p>PC: Flechas (Mover) + Espacio (Disparar)</p>
+                      <p>Móvil: Usa los botones en pantalla</p>
                     </div>
                 </div>
-                <Button variant="danger" onClick={() => setShowInfo(false)} className="py-2 text-xs">CLOSE</Button>
+                <Button variant="danger" onClick={() => setShowInfo(false)} className="py-2 text-xs">CERRAR</Button>
               </div>
             )}
 
@@ -611,17 +612,20 @@ const App: React.FC = () => {
               <NeonRocketLogo className="absolute bottom-2 right-2 w-12 h-12 opacity-30 pointer-events-none z-0" />
             )}
           </div>
-
+          
+          {/* CRT SCANLINES */}
           <div className="absolute inset-0 pointer-events-none z-40 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] opacity-20"></div>
           <div className="absolute inset-0 pointer-events-none z-40 bg-[radial-gradient(circle_at_center,transparent_60%,rgba(0,0,0,0.4)_100%)]"></div>
         </div>
 
+        {/* LANDSCAPE CONTROLS: RIGHT */}
         {isMobile && gameState === GameState.PLAYING && (
           <div className="hidden landscape:flex flex-col justify-center items-center h-full z-20 w-24 shrink-0 animate-in fade-in duration-300 delay-75">
              <ShootButton inputRef={inputRef} btnSizeClass="w-20 h-20 lg:w-24 lg:h-24" />
           </div>
         )}
 
+        {/* PORTRAIT CONTROLS: BOTTOM */}
         {isMobile && gameState === GameState.PLAYING && (
           <div className="flex landscape:hidden w-full justify-between items-center px-8 py-6 z-50 mt-auto animate-in slide-in-from-bottom-10 fade-in duration-300 pointer-events-none">
              <div className="pointer-events-auto">
@@ -646,7 +650,7 @@ const App: React.FC = () => {
   );
 };
 
-// --- 6. MOUNTING ---
+// --- 7. MONTAJE DE LA APLICACIÓN ---
 const rootEl = document.getElementById('root');
 if (rootEl) {
   const root = ReactDOM.createRoot(rootEl);
@@ -656,5 +660,5 @@ if (rootEl) {
     </React.StrictMode>
   );
 } else {
-  console.error("Root element not found");
+  console.error("No se encontró el elemento #root");
 }
