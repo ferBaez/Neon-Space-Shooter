@@ -1186,72 +1186,87 @@
                 requestAnimationFrame(animate);
             }
 
-            // --- EVENT LISTENERS ---
-            window.addEventListener('resize', resizeGame);
+            // --- EVENT LISTENERS (DOM READY) ---
+            window.onload = function () {
+                console.log("DOM Loaded, attaching listeners..."); // DEBUG
 
-            // Soporte Touch para botones de UI (Mejora de respuesta)
-            startBtn.addEventListener('click', startGame);
-            startBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startGame(); }, { passive: false });
+                // Resize inicial
+                resizeGame();
+                window.addEventListener('resize', resizeGame);
 
-            const restartBtn = document.getElementById('restart-btn');
-            restartBtn.addEventListener('click', () => {
-                location.reload();
-            });
-            restartBtn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                location.reload();
-            }, { passive: false });
+                // Soporte Touch para botones de UI
+                const startBtn = document.getElementById('start-btn');
+                const restartBtn = document.getElementById('restart-btn');
+                const infoBtn = document.getElementById('info-btn');
+                const closeInfoBtn = document.getElementById('close-info-btn');
 
-            const infoBtn = document.getElementById('info-btn');
-            const closeInfoBtn = document.getElementById('close-info-btn');
+                // Gameplay controls
+                const btnLeft = document.getElementById('btn-left');
+                const btnRight = document.getElementById('btn-right');
+                const btnShoot = document.getElementById('btn-shoot');
 
-            // Toggle Info
-            function toggleInfo() {
-                if (infoScreen.style.display === 'block') {
-                    infoScreen.style.display = 'none';
-                    if (gameRunning) gameState = 'PLAYING';
-                } else {
-                    infoScreen.style.display = 'block';
-                    if (gameRunning) gameState = 'PAUSED';
-                }
-            }
+                // Start Button
+                const handleStart = (e) => {
+                    if (e.cancelable && e.type === 'touchstart') e.preventDefault();
+                    console.log("Start button clicked/touched"); // DEBUG
+                    startGame();
+                };
+                startBtn.addEventListener('click', handleStart);
+                startBtn.addEventListener('touchstart', handleStart, { passive: false });
 
-            infoBtn.addEventListener('click', toggleInfo);
-            infoBtn.addEventListener('touchstart', (e) => { e.preventDefault(); toggleInfo(); }, { passive: false });
+                // Restart Button
+                const handleRestart = (e) => {
+                    if (e.cancelable && e.type === 'touchstart') e.preventDefault();
+                    location.reload();
+                };
+                restartBtn.addEventListener('click', handleRestart);
+                restartBtn.addEventListener('touchstart', handleRestart, { passive: false });
 
-            closeInfoBtn.addEventListener('click', toggleInfo);
-            closeInfoBtn.addEventListener('touchstart', (e) => { e.preventDefault(); toggleInfo(); }, { passive: false });
+                // Info Buttons
+                const toggleInfo = () => {
+                    if (infoScreen.style.display === 'block') {
+                        infoScreen.style.display = 'none';
+                        if (gameRunning) gameState = 'PLAYING';
+                    } else {
+                        infoScreen.style.display = 'block';
+                        if (gameRunning) gameState = 'PAUSED';
+                    }
+                };
+                infoBtn.addEventListener('click', toggleInfo);
+                infoBtn.addEventListener('touchstart', (e) => { e.preventDefault(); toggleInfo(); }, { passive: false });
+                closeInfoBtn.addEventListener('click', toggleInfo);
+                closeInfoBtn.addEventListener('touchstart', (e) => { e.preventDefault(); toggleInfo(); }, { passive: false });
 
-            // Touch controls (Gameplay)
-            // Left
-            btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowLeft'] = true; btnLeft.classList.add('active'); }, { passive: false });
-            btnLeft.addEventListener('touchend', (e) => { e.preventDefault(); keys['ArrowLeft'] = false; btnLeft.classList.remove('active'); });
+                // Touch Controls (Gameplay)
+                // Left
+                btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowLeft'] = true; btnLeft.classList.add('active'); }, { passive: false });
+                btnLeft.addEventListener('touchend', (e) => { e.preventDefault(); keys['ArrowLeft'] = false; btnLeft.classList.remove('active'); });
 
-            // Right
-            btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowRight'] = true; btnRight.classList.add('active'); }, { passive: false });
-            btnRight.addEventListener('touchend', (e) => { e.preventDefault(); keys['ArrowRight'] = false; btnRight.classList.remove('active'); });
+                // Right
+                btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowRight'] = true; btnRight.classList.add('active'); }, { passive: false });
+                btnRight.addEventListener('touchend', (e) => { e.preventDefault(); keys['ArrowRight'] = false; btnRight.classList.remove('active'); });
 
-            // Shoot
-            btnShoot.addEventListener('touchstart', (e) => { e.preventDefault(); keys['Space'] = true; btnShoot.classList.add('active'); }, { passive: false });
-            btnShoot.addEventListener('touchend', (e) => { e.preventDefault(); keys['Space'] = false; btnShoot.classList.remove('active'); });
+                // Shoot
+                btnShoot.addEventListener('touchstart', (e) => { e.preventDefault(); keys['Space'] = true; btnShoot.classList.add('active'); }, { passive: false });
+                btnShoot.addEventListener('touchend', (e) => { e.preventDefault(); keys['Space'] = false; btnShoot.classList.remove('active'); });
 
-            // Keyboard controls
-            window.addEventListener('keydown', (e) => {
-                if (e.code === 'ArrowLeft') keys['ArrowLeft'] = true;
-                if (e.code === 'ArrowRight') keys['ArrowRight'] = true;
-                if (e.code === 'Space') keys['Space'] = true;
-                if (e.code === 'Enter' && !gameRunning) startGame();
-            });
+                // Keyboard controls
+                window.addEventListener('keydown', (e) => {
+                    if (e.code === 'ArrowLeft') keys['ArrowLeft'] = true;
+                    if (e.code === 'ArrowRight') keys['ArrowRight'] = true;
+                    if (e.code === 'Space') keys['Space'] = true;
+                    if (e.code === 'Enter' && !gameRunning) startGame();
+                });
 
-            window.addEventListener('keyup', (e) => {
-                if (e.code === 'ArrowLeft') keys['ArrowLeft'] = false;
-                if (e.code === 'ArrowRight') keys['ArrowRight'] = false;
-                if (e.code === 'Space') keys['Space'] = false;
-            });
+                window.addEventListener('keyup', (e) => {
+                    if (e.code === 'ArrowLeft') keys['ArrowLeft'] = false;
+                    if (e.code === 'ArrowRight') keys['ArrowRight'] = false;
+                    if (e.code === 'Space') keys['Space'] = false;
+                });
 
-            // Loop principal
-            animate();
-
+                // Iniciar loop
+                animate();
+            };
         </script>
 </body>
 
