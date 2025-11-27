@@ -748,6 +748,14 @@
             let lives = 3;
             let level = 1; // Nuevo sistema de niveles
 
+            // Variables de Entidades (Movidas aquí para evitar TDZ en resizeGame)
+            let player;
+            let enemies = [];
+            let projectiles = [];
+            let particles = [];
+            let powerups = [];
+            let enemyDir = 1;
+
             let keys = {
                 ArrowLeft: false,
                 ArrowRight: false,
@@ -793,10 +801,12 @@
             window.addEventListener('resize', resizeGame);
             window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
             resizeGame();
+            console.log("CHECKPOINT 1: Resize done"); // DEBUG
 
             // --- AUDIO & HAPTICS ---
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             const audioCtx = new AudioContext();
+            console.log("CHECKPOINT 2: AudioCtx created"); // DEBUG
 
             function playSound(type) {
                 if (audioCtx.state === 'suspended') audioCtx.resume().catch(e => { });
@@ -883,9 +893,7 @@
                 btn.addEventListener('mouseleave', deactivate);
             }
 
-            setupTouchBtn(btnLeft, 'ArrowLeft');
-            setupTouchBtn(btnRight, 'ArrowRight');
-            setupTouchBtn(btnShoot, 'Space');
+            // setupTouchBtn calls removed - logic moved to initGameEvents to ensure DOM readiness
 
             // --- ENTIDADES ---
             class Player {
@@ -1032,15 +1040,9 @@
             }
 
             // --- GAME LOOP ---
-            let player;
-            let enemies = [];
-            let projectiles = [];
-            let particles = [];
-            let powerups = [];
-            let enemyDir = 1;
+            // Variables movidas al inicio para evitar errores de referencia
 
             function startGame() {
-                console.log("startGame called!"); // DEBUG LOG
                 // Solicitar Pantalla Completa (Mejora de Inmersión)
                 if (document.documentElement.requestFullscreen) {
                     document.documentElement.requestFullscreen().catch(err => console.log("Fullscreen error:", err));
@@ -1188,8 +1190,6 @@
 
             // --- INICIALIZACIÓN ROBUSTA ---
             function initGameEvents() {
-                console.log("Initializing Game Events..."); // DEBUG
-
                 // Resize inicial
                 resizeGame();
                 window.addEventListener('resize', resizeGame);
@@ -1209,7 +1209,6 @@
                 // Start Button
                 const handleStart = (e) => {
                     if (e.cancelable && e.type === 'touchstart') e.preventDefault();
-                    console.log("Start button clicked/touched"); // DEBUG
                     startGame();
                 };
                 startBtn.onclick = handleStart; // Force direct assignment
@@ -1263,7 +1262,6 @@
                 };
 
                 // Iniciar loop
-                console.log("Starting animation loop...");
                 animate();
             }
 
