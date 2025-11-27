@@ -736,6 +736,7 @@
             let ASPECT_RATIO = GAME_WIDTH / GAME_HEIGHT;
 
             let gameState = 'START';
+            let gameRunning = false; // Variable de estado global
             let score = 0;
             let lives = 3;
             let level = 1; // Nuevo sistema de niveles
@@ -1032,9 +1033,10 @@
             let enemyDir = 1;
 
             function startGame() {
+                console.log("startGame called!"); // DEBUG LOG
                 // Solicitar Pantalla Completa (Mejora de Inmersión)
                 if (document.documentElement.requestFullscreen) {
-                    document.documentElement.requestFullscreen().catch(err => console.log(err));
+                    document.documentElement.requestFullscreen().catch(err => console.log("Fullscreen error:", err));
                 }
 
                 gameRunning = true;
