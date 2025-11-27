@@ -394,23 +394,27 @@
                 padding-top: 20px;
             }
 
-            /* Ajuste Logo Portrait */
+            /* Ajuste Logo Portrait - Más pequeño aún */
             #start-screen img {
-                max-height: 20vh;
-                /* Limitar altura */
+                max-height: 15vh;
+                /* Reducido a 15vh */
                 width: 100%;
-                /* Ocupar ancho disponible */
-                max-width: 300px;
-                /* Limitar ancho máximo absoluto */
+                max-width: 250px;
                 object-fit: contain;
-                /* Asegurar que se vea completo */
             }
 
-            /* Bajar controles en vertical */
+            /* Controles: Ocultos por defecto, visibles al jugar */
             #mobile-controls {
+                display: none;
+                /* Por defecto oculto */
                 padding-bottom: 0;
                 margin-bottom: -60px;
                 transform: translateY(60px);
+            }
+
+            /* Mostrar solo cuando el juego corre */
+            body.game-running #mobile-controls {
+                display: flex;
             }
         }
 
@@ -496,11 +500,12 @@
                 display: none !important;
             }
 
-            /* Controles Landscape - VISIBILIDAD GESTIONADA POR JS */
+            /* Controles Landscape: Ocultos por defecto */
             #mobile-controls {
+                display: none;
+                /* Por defecto oculto */
                 position: fixed;
                 bottom: 30px;
-                /* Subir 10px más (de 20 a 30) */
                 left: 0;
                 width: 100%;
                 height: 100%;
@@ -510,6 +515,11 @@
                 align-items: flex-end;
                 justify-content: space-between;
                 z-index: 100;
+            }
+
+            /* Mostrar solo cuando el juego corre */
+            body.game-running #mobile-controls {
+                display: flex !important;
             }
 
             .control-btn {
@@ -955,17 +965,18 @@
                     document.documentElement.requestFullscreen().catch(err => console.log(err));
                 }
 
-                score = 0; lives = 3; level = 1; gameState = 'PLAYING';
+                gameRunning = true;
+                score = 0;
+                lives = 3;
+                level = 1;
                 scoreDisplay.innerText = `SCORE: ${score}`;
                 livesDisplay.innerText = `LIVES: ${lives}`;
                 startScreen.style.display = 'none';
                 gameOverScreen.style.display = 'none';
                 infoScreen.style.display = 'none';
 
-                // Mostrar controles solo al jugar y si es móvil
-                if (isMobileDevice) {
-                    document.getElementById('mobile-controls').style.display = 'flex';
-                }
+                // Activar estado de juego en CSS (Muestra controles en móvil)
+                document.body.classList.add('game-running');
 
                 player = new Player();
                 projectiles = [];
@@ -974,17 +985,16 @@
                 powerups = [];
                 initEnemies(); // Call initEnemies to populate
                 if (audioCtx.state === 'suspended') audioCtx.resume();
-                // animate(); // animate is called once at the end of the script
+                animate();
             }
 
             function endGame() {
-                gameState = 'GAMEOVER'; // Ensure game state is set
+                gameState = 'GAMEOVER';
                 finalScoreDisplay.innerText = score;
                 gameOverScreen.style.display = 'block';
-                // Ocultar controles al terminar
-                if (isMobileDevice) { // Only hide if they were shown
-                    document.getElementById('mobile-controls').style.display = 'none';
-                }
+
+                // Desactivar estado de juego
+                document.body.classList.remove('game-running');
             }
 
             function initEnemies() {
