@@ -22,15 +22,15 @@
       #loading-screen { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #0ff; z-index: 9999; }
       .blink { animation: blink 1s infinite; }
       @keyframes blink { 50% { opacity: 0.5; } }
-      #error-log { color: #ff0055; font-family: monospace; padding: 20px; text-align: center; display: none; max-width: 80%; }
+      #error-log { color: #ff0055; font-family: monospace; padding: 20px; text-align: center; display: none; max-width: 80%; background: rgba(50,0,0,0.8); border: 1px solid red; margin-top: 20px; }
     </style>
 
-    <!-- CRITICAL: Clean Import Map using ONLY esm.sh -->
+    <!-- CRITICAL: Clean Import Map (Only esm.sh dev versions for better debugging) -->
     <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@18.2.0",
-    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react": "https://esm.sh/react@18.2.0?dev",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?dev",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "react/": "https://aistudiocdn.com/react@^19.2.0/"
   }
@@ -55,17 +55,26 @@
         if(loading) loading.style.display = 'none';
         if(log) {
           log.style.display = 'block';
-          log.innerHTML = "ERROR CRITICO:<br>" + msg;
+          // Try to get more info from the error object if possible
+          let details = "";
+          if(error && error.stack) details = "<br><small>" + error.stack + "</small>";
+          log.innerHTML = "ERROR:<br>" + msg + "<br><small>" + url + ":" + line + "</small>" + details;
         }
+        return false;
       };
       
       // Remove loading screen when React mounts
       window.addEventListener('load', () => {
+        let attempts = 0;
         const checkRoot = setInterval(() => {
-          if (document.getElementById('root').childElementCount > 0) {
+          attempts++;
+          const root = document.getElementById('root');
+          if (root && root.childElementCount > 0) {
             document.getElementById('loading-screen').style.display = 'none';
             clearInterval(checkRoot);
           }
+          // Stop checking after 10 seconds
+          if (attempts > 100) clearInterval(checkRoot);
         }, 100);
       });
     </script>
