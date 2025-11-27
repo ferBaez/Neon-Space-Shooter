@@ -851,6 +851,7 @@
             });
 
             // --- MEJORA DE CONTROLES TÁCTILES ---
+            // Fallback para ratón (PC)
             function setupTouchBtn(btn, code) {
                 const activate = (e) => {
                     if (e.cancelable) e.preventDefault();
@@ -873,16 +874,6 @@
                 btn.addEventListener('mouseup', deactivate);
                 btn.addEventListener('mouseleave', deactivate);
             }
-
-            // Mejorar respuesta del botón de inicio en móviles
-            const handleStart = (e) => {
-                if (e.cancelable && e.type === 'touchstart') e.preventDefault();
-                initGame();
-            };
-            startBtn.addEventListener('touchstart', handleStart, { passive: false });
-            startBtn.addEventListener('click', handleStart);
-            document.getElementById('restart-btn').addEventListener('touchstart', handleStart, { passive: false });
-            document.getElementById('restart-btn').addEventListener('click', handleStart);
 
             setupTouchBtn(btnLeft, 'ArrowLeft');
             setupTouchBtn(btnRight, 'ArrowRight');
