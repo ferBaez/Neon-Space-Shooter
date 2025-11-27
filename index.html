@@ -12,50 +12,35 @@
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://ferbaez.github.io/Neon-Space-Shooter" />
 
-    <!-- --- OPEN GRAPH / FACEBOOK / WHATSAPP --- -->
+    <!-- --- OPEN GRAPH --- -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ferbaez.github.io/Neon-Space-Shooter" />
     <meta property="og:title" content="Neon Space Shooter 🚀" />
     <meta property="og:description" content="¡Juego arcade de naves retro! Juega gratis ahora en tu navegador." />
     <meta property="og:image" content="https://ferbaez.github.io/Neon-Space-Shooter/game_preview.png" />
     <meta property="og:site_name" content="Neon Space Shooter" />
-    <meta property="og:locale" content="es_ES" />
 
-    <!-- --- TWITTER --- -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://ferbaez.github.io/Neon-Space-Shooter" />
-    <meta property="twitter:title" content="Neon Space Shooter 🚀" />
-    <meta property="twitter:description" content="¡Juego arcade de naves retro! Juega gratis ahora en tu navegador." />
-    <meta property="twitter:image" content="https://ferbaez.github.io/Neon-Space-Shooter/game_preview.png" />
-
-    <!-- --- MOBILE APP CAPABILITIES --- -->
+    <!-- --- MOBILE --- -->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#000000" />
 
-    <!-- --- AEO (Answer Engine Optimization) & SCHEMA.ORG --- -->
+    <!-- --- JSON-LD --- -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "VideoGame",
       "name": "Neon Space Shooter",
       "url": "https://ferbaez.github.io/Neon-Space-Shooter",
-      "description": "Videojuego de disparos espaciales estilo arcade retro con gráficos de neón. Juega directamente en el navegador sin descargas.",
-      "genre": ["Arcade", "Shooter", "Action"],
-      "gamePlatform": ["Browser", "Mobile", "PC"],
+      "description": "Videojuego de disparos espaciales estilo arcade retro con gráficos de neón.",
+      "genre": ["Arcade", "Shooter"],
+      "gamePlatform": "Browser",
       "applicationCategory": "Game",
-      "operatingSystem": "Any",
       "author": {
         "@type": "Organization",
         "name": "Hitster Ai",
         "url": "https://studio--hitsterai.us-central1.hosted.app/es"
-      },
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock"
       },
       "image": "https://ferbaez.github.io/Neon-Space-Shooter/logo.png"
     }
@@ -64,81 +49,37 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     
-    <!-- Rocket Favicon (SVG Data URI) -->
+    <!-- Rocket Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
     
     <style>
-      body {
-        margin: 0;
-        background-color: #050505;
-        overflow: hidden;
-        touch-action: none;
-        font-family: 'Press Start 2P', cursive;
-        user-select: none;
-        -webkit-user-select: none;
-        /* Disable text size inflation on iOS */
-        -webkit-text-size-adjust: none; 
-      }
-      /* Custom Scrollbar for modals */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #111;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #0ff;
-        border-radius: 4px;
-      }
-      #root:empty::before {
-        content: 'Cargando Motor...';
-        color: #0ff;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 12px;
-        animation: blink 1s infinite;
-      }
+      body { margin: 0; background-color: #050505; overflow: hidden; touch-action: none; font-family: 'Press Start 2P', cursive; user-select: none; -webkit-user-select: none; -webkit-text-size-adjust: none; }
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #111; }
+      ::-webkit-scrollbar-thumb { background: #0ff; border-radius: 4px; }
+      #root:empty::before { content: 'Cargando Motor...'; color: #0ff; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px; animation: blink 1s infinite; }
       @keyframes blink { 50% { opacity: 0.5; } }
     </style>
 
-    <!-- Import Map using public ESM.sh CDN for better GitHub compatibility -->
+    <!-- Import Map for React modules -->
     <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@18.2.0",
     "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-    "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "react/": "https://aistudiocdn.com/react@^19.2.0/"
   }
 }
 </script>
-</head>
+    
+    <!-- Babel Standalone to compile TSX in browser -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
   <body>
     <div id="root"></div>
     
-    <!-- Explicit Entry Point for Bundlers/Browsers -->
-    <script type="module" src="./index.tsx"></script>
-
-    <!-- Error Handler for debugging Black Screens on GitHub -->
-    <script>
-      window.addEventListener('error', function(e) {
-        // Ignore resizing errors often thrown by canvas
-        if (e.message && e.message.includes('ResizeObserver')) return;
-        
-        console.error("Global Error:", e);
-        const root = document.getElementById('root');
-        // Only show error if app hasn't loaded (root is empty or loading)
-        if (root && (!root.children.length || root.innerText.includes('Cargando'))) {
-          root.innerHTML = '<div style="color:#ff5555; padding:20px; text-align:center; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center;">' +
-            '<h2 style="margin-bottom:10px;">⚠ Error de Inicialización</h2>' +
-            '<p style="font-size:10px; max-width:80%; line-height:1.5;">' + e.message + '</p>' +
-            '<p style="font-size:9px; color:#888; margin-top:20px;">Nota: Si ves esto en GitHub Pages, asegúrate de que el código ha sido compilado (Built) ya que los navegadores no ejecutan JSX/TSX directamente.</p>' +
-            '</div>';
-        }
-      });
-    </script>
+    <!-- Main Game Script: Type 'text/babel' triggers compilation -->
+    <script type="text/babel" data-type="module" data-presets="react,typescript" src="./index.tsx"></script>
   </body>
 </html>
