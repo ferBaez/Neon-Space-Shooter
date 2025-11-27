@@ -1,86 +1,1260 @@
-import React, { useCallback } from 'react';
-import { InputState } from '../types';
+<!DOCTYPE html>
+<html lang="es">
 
-interface ControlsProps {
-  inputRef: React.MutableRefObject<InputState>;
-  className?: string;
-  btnSizeClass?: string;
-}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-// Reusable styling
-const btnBase = "rounded-full border-2 bg-white/5 backdrop-blur-md flex items-center justify-center text-2xl select-none transition-all touch-none active:scale-90 shadow-lg";
+    <!-- --- SEO & AEO --- -->
+    <title>Neon Space Shooter | Juego Arcade Gratis</title>
+    <meta name="description"
+        content="Juego arcade de naves espaciales. Dispara y esquiva en este clásico estilo neón. Controles táctiles optimizados para móvil.">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Ferbaez">
 
-export const ShootButton: React.FC<ControlsProps> = ({ inputRef, className = '', btnSizeClass = "w-20 h-20 sm:w-24 sm:h-24" }) => {
-  const handleTouch = useCallback((active: boolean) => (e: React.TouchEvent | React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    inputRef.current.shoot = active;
-    if (active && navigator.vibrate) navigator.vibrate(10);
-  }, [inputRef]);
+    <!-- PWA / MOBILE APP CAPABILITY -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
 
-  return (
-    <button
-      className={`${btnBase} ${btnSizeClass} border-red-500/50 text-red-500 shadow-red-900/20 active:bg-red-500 active:text-white ${className}`}
-      onMouseDown={handleTouch(true)}
-      onMouseUp={handleTouch(false)}
-      onMouseLeave={handleTouch(false)}
-      onTouchStart={handleTouch(true)}
-      onTouchEnd={handleTouch(false)}
-      aria-label="Shoot"
-    >
-      🔥
-    </button>
-  );
-};
+    <link rel="canonical" href="https://ferbaez.github.io/Neon-Space-Shooter">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
 
-export const DPad: React.FC<ControlsProps> = ({ inputRef, className = '', btnSizeClass = "w-20 h-20 sm:w-24 sm:h-24" }) => {
-  const handleTouch = useCallback((key: 'left' | 'right', active: boolean) => (e: React.TouchEvent | React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    inputRef.current[key] = active;
-    if (active && navigator.vibrate) navigator.vibrate(10);
-  }, [inputRef]);
+    <!-- --- OPEN GRAPH --- -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Neon Space Shooter 🚀">
+    <meta property="og:description" content="Juego arcade de naves. ¡Juega ahora en tu móvil o PC!">
+    <meta property="og:site_name" content="Neon Space Shooter">
+    <meta property="og:url" content="https://ferbaez.github.io/Neon-Space-Shooter">
 
-  return (
-    <div className={`flex gap-4 ${className}`}>
-      <button
-        className={`${btnBase} ${btnSizeClass} border-cyan-400/50 text-cyan-400 shadow-cyan-900/20 active:bg-cyan-400 active:text-black`}
-        onMouseDown={handleTouch('left', true)}
-        onMouseUp={handleTouch('left', false)}
-        onMouseLeave={handleTouch('left', false)}
-        onTouchStart={handleTouch('left', true)}
-        onTouchEnd={handleTouch('left', false)}
-        aria-label="Move Left"
-      >
-        ◀
-      </button>
-      <button
-        className={`${btnBase} ${btnSizeClass} border-cyan-400/50 text-cyan-400 shadow-cyan-900/20 active:bg-cyan-400 active:text-black`}
-        onMouseDown={handleTouch('right', true)}
-        onMouseUp={handleTouch('right', false)}
-        onMouseLeave={handleTouch('right', false)}
-        onTouchStart={handleTouch('right', true)}
-        onTouchEnd={handleTouch('right', false)}
-        aria-label="Move Right"
-      >
-        ▶
-      </button>
+    <!-- IMAGEN PREVIA -->
+    <meta property="og:image" content="game_preview.png">
+    <meta property="og:image:secure_url" content="game_preview.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Neon Space Shooter Gameplay Preview">
+
+    <!-- --- TWITTER CARDS --- -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Neon Space Shooter">
+    <meta name="twitter:description" content="¡Juego arcade de naves retro! Juega gratis aquí.">
+    <meta name="twitter:image" content="game_preview.png">
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Neon Space Shooter",
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Videojuego de disparos espaciales estilo arcade retro con controles táctiles.",
+      "genre": ["Arcade", "Shooter"],
+      "url": "https://ferbaez.github.io/Neon-Space-Shooter"
+    }
+    </script>
+
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --neon-blue: #0ff;
+            --neon-pink: #f0f;
+            --neon-green: #0f0;
+            --neon-red: #f00;
+            --neon-yellow: #ff0;
+            --bg-color: #050505;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            overflow: hidden;
+            font-family: 'Press Start 2P', cursive;
+            color: #fff;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            /* Deshabilitar resaltado azul al tocar en móviles */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Fondo general */
+        #main-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+        }
+
+        /* ENVOLTORIO DEL JUEGO */
+        #game-wrapper {
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+            transition: width 0.3s, height 0.3s;
+            z-index: 1;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--neon-blue);
+            box-sizing: border-box;
+            background-color: rgba(0, 0, 0, 0.85);
+            box-shadow: 0 0 15px var(--neon-blue), inset 0 0 20px rgba(0, 255, 255, 0.2);
+            /* Optimización renderizado para pixel art */
+            image-rendering: pixelated;
+        }
+
+        /* Capa UI dentro del juego */
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            padding: 10px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .hud-header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .hud-text {
+            font-size: 14px;
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        #score-display {
+            color: var(--neon-yellow);
+        }
+
+        #lives-display {
+            color: var(--neon-green);
+        }
+
+        /* Botón de ayuda integrado en modal (estilos base en .btn) */
+        #info-btn {
+            /* Estilos específicos si son necesarios, o heredar de .btn */
+        }
+
+        /* Asegurar que el logo no se corte en móviles */
+        #start-screen img {
+            max-width: 50%;
+            /* Reducir ancho máximo al 50% */
+            height: auto;
+            object-fit: contain;
+            /* Asegurar proporción */
+        }
+
+        /* --- FOOTER PREMIUM --- */
+        #game-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(5, 5, 5, 0.95);
+            border-top: 2px solid var(--neon-blue);
+            box-shadow: 0 -5px 20px rgba(0, 255, 255, 0.15);
+            padding: 12px 0;
+            text-align: center;
+            font-size: 10px;
+            color: #ddd;
+            z-index: 1000;
+            font-family: 'Press Start 2P', cursive;
+            text-transform: uppercase;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.5;
+        }
+
+        #game-footer a {
+            color: var(--neon-yellow);
+            text-decoration: none;
+            pointer-events: auto;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            border-bottom: 1px dashed transparent;
+        }
+
+        #game-footer a:hover {
+            color: var(--neon-pink);
+            text-shadow: 0 0 8px var(--neon-pink);
+            border-bottom: 1px dashed var(--neon-pink);
+        }
+
+        .footer-sep {
+            color: #555;
+            margin: 0 2px;
+        }
+
+        @media (max-width: 600px) {
+            #game-footer {
+                font-size: 8px;
+                flex-direction: column;
+                gap: 5px;
+                padding: 10px 0;
+            }
+
+            .footer-sep {
+                display: none;
+            }
+        }
+
+        /* --- CONTROLES MÓVILES --- */
+        #mobile-controls {
+            display: none;
+            width: 100%;
+            height: 160px;
+            padding: 20px;
+            box-sizing: border-box;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            margin-top: 10px;
+            padding-bottom: 60px;
+            /* Ajustado para el footer */
+        }
+
+        .control-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .control-btn {
+            width: 70px;
+            height: 70px;
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid var(--neon-blue);
+            border-radius: 50%;
+            color: var(--neon-blue);
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            user-select: none;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--neon-blue);
+            backdrop-filter: blur(4px);
+            transition: transform 0.1s;
+        }
+
+        .control-btn:active,
+        .control-btn.active {
+            background: var(--neon-blue);
+            color: #000;
+            transform: scale(0.90);
+            box-shadow: 0 0 20px var(--neon-blue);
+        }
+
+        #btn-shoot {
+            border-color: var(--neon-red);
+            color: var(--neon-red);
+            box-shadow: 0 0 10px var(--neon-red);
+            width: 80px;
+            height: 80px;
+            font-size: 30px;
+        }
+
+        #btn-shoot:active,
+        #btn-shoot.active {
+            background: var(--neon-red);
+            color: #fff;
+            box-shadow: 0 0 20px var(--neon-red);
+        }
+
+        /* Modales */
+        .modal {
+            position: fixed;
+            /* Fixed para centrar en pantalla, no en wrapper */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            pointer-events: auto;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px;
+            border: 3px solid var(--neon-pink);
+            box-shadow: 0 0 30px var(--neon-pink);
+            z-index: 50;
+            width: 85%;
+            max-width: 400px;
+            max-height: 85vh;
+            /* Limitar altura para evitar cortes */
+            overflow-y: auto;
+            /* Scroll si es necesario */
+            border-radius: 8px;
+            display: none;
+        }
+
+        #start-screen {
+            display: block;
+        }
+
+        h1 {
+            color: var(--neon-pink);
+            font-size: 20px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        p,
+        li {
+            font-size: 10px;
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Mejora específica para instrucciones de inicio */
+        #start-screen p {
+            font-size: 12px;
+            color: #fff;
+            margin: 15px 0 25px 0;
+            text-shadow: 0 0 2px var(--neon-blue);
+            line-height: 2;
+            font-weight: bold;
+        }
+
+        .enter-hint {
+            font-size: 10px;
+            color: #888;
+            margin-top: 15px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 12px 20px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            cursor: pointer;
+            text-shadow: 0 0 5px var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+        }
+
+        /* --- RESPONSIVIDAD AVANZADA (LAYOUTS) --- */
+
+        /* Dispositivos Táctiles o Pantallas Pequeñas */
+        @media (max-width: 1024px),
+        (hover: none) and (pointer: coarse) {
+            /* Eliminado display: flex !important; se controla por JS */
+        }
+
+        /* Móvil Vertical (Portrait) */
+        @media (max-width: 1024px) and (orientation: portrait) {
+            #main-container {
+                justify-content: flex-start;
+                padding-top: 20px;
+            }
+
+            /* Ajuste Logo Portrait - CORRECCIÓN DEFINITIVA */
+            #start-screen img {
+                display: block;
+                margin: 0 auto 10px auto;
+                width: auto;
+                max-width: 80%;
+                max-height: 12vh;
+                /* Reducido para asegurar visibilidad */
+                object-fit: contain;
+                filter: drop-shadow(0 0 10px #ff00ff);
+            }
+
+            /* Controles: Ocultos por defecto, visibles al jugar */
+            #mobile-controls {
+                display: none;
+                /* Por defecto oculto */
+                padding-bottom: 0;
+                margin-bottom: -60px;
+                transform: translateY(60px);
+            }
+
+            /* Mostrar solo cuando el juego corre */
+            body.game-running #mobile-controls {
+                display: flex;
+            }
+        }
+
+        /* Móvil Horizontal (Landscape) - RECONSTRUCCIÓN MINIMALISTA */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            #main-container {
+                flex-direction: row;
+                justify-content: center;
+                padding: 0;
+                align-items: center;
+                width: 100vw;
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            /* Modal Full Screen Flex */
+            .modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                max-width: none;
+                max-height: none;
+                border: none;
+                border-radius: 0;
+                background: rgba(0, 0, 0, 0.95);
+                display: flex;
+                flex-direction: column;
+                /* Columna para centrar todo */
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+                padding: 20px;
+                box-sizing: border-box;
+                transform: none;
+                z-index: 20000;
+                /* Z-index superior a todo */
+            }
+
+            .modal-header,
+            .modal-content {
+                width: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* OCULTAR LOGO Y TEXTO EN LANDSCAPE PARA PRIORIZAR JUEGO */
+            #start-screen img {
+                display: none !important;
+            }
+
+            #start-screen p {
+                display: none !important;
+            }
+
+            .enter-hint {
+                display: none !important;
+            }
+
+            /* Título visible */
+            #start-screen h1 {
+                font-size: 24px;
+                margin: 0 0 20px 0;
+                color: var(--neon-pink);
+            }
+
+            /* Botones grandes y visibles */
+            .btn {
+                font-size: 20px;
+                padding: 15px 40px;
+                margin: 10px;
+                display: block !important;
+                width: auto;
+                background: rgba(0, 255, 255, 0.1);
+                border: 2px solid var(--neon-blue);
+            }
+
+            /* Footer oculto */
+            #game-footer {
+                display: none !important;
+            }
+
+            /* Controles Landscape: Ocultos por defecto */
+            #mobile-controls {
+                display: none;
+                /* Por defecto oculto */
+                position: fixed;
+                bottom: 30px;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0 40px;
+                pointer-events: none;
+                align-items: flex-end;
+                justify-content: space-between;
+                z-index: 99999;
+                /* Z-index MÁXIMO para asegurar click */
+            }
+
+            /* Mostrar solo cuando el juego corre */
+            body.game-running #mobile-controls {
+                display: flex !important;
+            }
+
+            .control-btn {
+                pointer-events: auto;
+                width: 80px;
+                height: 80px;
+                margin-bottom: 20px;
+                background: rgba(0, 0, 0, 0.5);
+            }
+
+            .control-group {
+                margin-left: 30px;
+                /* Mover 10px más a la derecha (de 20 a 30) */
+                display: flex;
+                gap: 20px;
+            }
+        }
+
+        <style>
+        /* ... (estilos existentes) ... */
+
+        /* PANTALLA DE BLOQUEO DE ORIENTACIÓN */
+        #orientation-lock {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 999999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--neon-blue);
+        }
+
+        #orientation-lock h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        #orientation-lock p {
+            font-size: 16px;
+            color: #fff;
+        }
+
+        /* DETECCIÓN DE LANDSCAPE PARA BLOQUEO */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            #orientation-lock {
+                display: flex !important;
+            }
+
+            #main-container {
+                display: none !important;
+            }
+        }
+
+        /* OPTIMIZACIÓN PORTRAIT FULL SCREEN */
+        @media (max-width: 1024px) and (orientation: portrait) {
+            #main-container {
+                padding: 0;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #game-wrapper {
+                width: 100vw !important;
+                height: 100vh !important;
+                box-shadow: none;
+                border: none;
+            }
+
+            canvas {
+                border: none;
+                /* Sin bordes en móvil para inmersión total */
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            /* Controles Flotantes sobre el juego */
+            #mobile-controls {
+                position: fixed;
+                bottom: 20px;
+                left: 0;
+                width: 100%;
+                z-index: 1000;
+                padding: 0 20px;
+                box-sizing: border-box;
+                /* Fondo degradado sutil para mejorar visibilidad de botones */
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+                padding-bottom: 30px;
+                /* Espacio extra para gestos de iOS */
+            }
+
+            /* Ajuste Logo Portrait */
+            #start-screen img {
+                max-height: 15vh;
+                width: auto;
+                max-width: 80%;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- PANTALLA DE BLOQUEO -->
+    <div id="orientation-lock">
+        <div style="font-size: 50px;">📱</div>
+        <h2>GIRA TU MÓVIL</h2>
+        <p>Este juego está diseñado<br>para jugarse en vertical.</p>
     </div>
-  );
-};
 
-// Default composite component for Portrait mode
-const MobileControls: React.FC<ControlsProps> = (props) => {
-  return (
-    <div className={`flex justify-between items-center w-full px-8 py-4 ${props.className || ''}`}>
-      <div className="pointer-events-auto">
-        <ShootButton {...props} />
-      </div>
-      <div className="pointer-events-auto">
-        <DPad {...props} />
-      </div>
-    </div>
-  );
-};
+    <div id="main-container">
+        <div id="game-wrapper">
+            <canvas id="gameCanvas"></canvas>
 
-export default MobileControls;
+            <div id="ui-layer">
+                <header class="hud-header">
+                    <span id="score-display" class="hud-text">SCORE: 0</span>
+                    <span id="lives-display" class="hud-text">LIVES: 3</span>
+                </header>
+                <!-- Modales -->
+                <div id="start-screen" class="modal">
+                    <div class="modal-header">
+                        <img src="logo.png" alt="Neon Space Shooter Logo"
+                            style="max-width: 60%; margin-bottom: 15px; filter: drop-shadow(0 0 10px #ff00ff);">
+                        <h1>NEON SPACE SHOOTER</h1>
+                    </div>
+                    <div class="modal-content">
+                        <p>MóVIL: Usa los botones<br>PC: Flechas + Espacio</p>
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button id="start-btn" class="btn" style="flex: 2;">JUGAR</button>
+                            <button id="info-btn" class="btn" style="flex: 1; background: rgba(0,0,0,0.5);">?</button>
+                        </div>
+                        <p class="enter-hint">PRESS ENTER TO START</p>
+                    </div>
+                </div>
+
+                <section id="game-over-screen" class="modal">
+                    <h1 style="color: var(--neon-red);">GAME OVER</h1>
+                    <p>SCORE FINAL: <span id="final-score">0</span></p>
+                    <button class="btn" id="restart-btn">REINTENTAR</button>
+                </section>
+
+                <section id="info-screen" class="modal">
+                    <h2 style="color: var(--neon-yellow); font-size:14px; margin-bottom:15px;">AYUDA</h2>
+                    <div style="text-align: left; max-height: 150px; overflow-y: auto;">
+                        <p>• Mover: Flechas (Derecha)</p>
+                        <p>• Disparo: Botón Rojo (Izquierda)</p>
+                        <p>• Objetivo: Destruye todo</p>
+                    </div>
+                    <button class="btn" id="close-info-btn"
+                        style="border-color:var(--neon-red); color:var(--neon-red);">CERRAR</button>
+                </section>
+            </div>
+
+            <!-- CONTROLES MÓVILES -->
+            <div id="mobile-controls">
+                <!-- Izquierda: Disparo -->
+                <button id="btn-shoot" class="control-btn">🔥</button>
+
+                <!-- Derecha: Movimiento -->
+                <div class="control-group">
+                    <button id="btn-left" class="control-btn">◀</button>
+                    <button id="btn-right" class="control-btn">▶</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer id="game-footer">
+            <span>Todos los derechos reservados a</span>
+            <a href="https://studio--hitsterai.us-central1.hosted.app/es" target="_blank"
+                title="Visitar Hitster Ai">Hitster
+                Ai</a>
+            <span class="footer-sep">|</span>
+            <a href="mailto:baez@hitster.page" title="Enviar correo">Contáctanos</a>
+        </footer>
+
+        <script>
+            // --- CONFIGURACIÓN ---
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d', { alpha: false });
+            const gameWrapper = document.getElementById('game-wrapper');
+
+            const scoreDisplay = document.getElementById('score-display');
+            const livesDisplay = document.getElementById('lives-display');
+            const startScreen = document.getElementById('start-screen');
+            const gameOverScreen = document.getElementById('game-over-screen');
+            const infoScreen = document.getElementById('info-screen');
+            const finalScoreDisplay = document.getElementById('final-score');
+            const startBtn = document.getElementById('start-btn');
+
+            const btnLeft = document.getElementById('btn-left');
+            const btnRight = document.getElementById('btn-right');
+            const btnShoot = document.getElementById('btn-shoot');
+
+            // Dimensiones dinámicas para adaptarse a Landscape/Portrait
+            let GAME_WIDTH = window.innerWidth;
+            let GAME_HEIGHT = window.innerHeight;
+            let ASPECT_RATIO = GAME_WIDTH / GAME_HEIGHT; window.innerWidth;
+            let GAME_HEIGHT = window.innerHeight;
+            let ASPECT_RATIO = GAME_WIDTH / GAME_HEIGHT;
+
+            let gameState = 'START';
+            let score = 0;
+            let lives = 3;
+            let level = 1; // Nuevo sistema de niveles
+
+            let keys = {
+                ArrowLeft: false,
+                ArrowRight: false,
+                Space: false,
+                Enter: false
+            };
+
+            const COLORS = {
+                blue: '#0ff', pink: '#f0f', green: '#0f0',
+                red: '#f00', yellow: '#ff0', white: '#fff'
+            };
+
+            let isMobileDevice = false;
+
+            // --- RESIZE INTELIGENTE (HIGH DPI SUPPORT) ---
+            function resizeGame() {
+                // En móviles, siempre usamos el tamaño completo de la ventana
+                if (isMobileDevice) {
+                    GAME_WIDTH = window.innerWidth;
+                    GAME_HEIGHT = window.innerHeight;
+                } else {
+                    // En PC mantenemos el aspect ratio original o ajustamos
+                    GAME_WIDTH = window.innerWidth;
+                    GAME_HEIGHT = window.innerHeight;
+                    // Opcional: Limitar ancho en PC si se desea, pero por ahora full screen
+                }
+
+                canvas.width = GAME_WIDTH;
+                canvas.height = GAME_HEIGHT;
+
+                gameWrapper.style.width = `${GAME_WIDTH}px`;
+                gameWrapper.style.height = `${GAME_HEIGHT}px`;
+
+                // Reposicionar jugador al cambiar tamaño
+                if (typeof player !== 'undefined' && player) {
+                    player.y = GAME_HEIGHT - 100; // Un poco más arriba del fondo
+                    // Mantener dentro de los límites horizontales
+                    if (player.x > GAME_WIDTH - player.width) player.x = GAME_WIDTH - player.width - 10;
+                    if (player.x < 0) player.x = 10;
+                }
+            }
+
+            window.addEventListener('resize', resizeGame);
+            window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
+            resizeGame();
+
+            // --- AUDIO & HAPTICS ---
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioCtx = new AudioContext();
+
+            function playSound(type) {
+                if (audioCtx.state === 'suspended') audioCtx.resume().catch(e => { });
+                if (gameState !== 'PLAYING' && type !== 'gameover') return;
+
+                // Feedback Háptico (Vibración)
+                if (navigator.vibrate) {
+                    if (type === 'shoot') navigator.vibrate(10); // Vibración muy corta
+                    if (type === 'explosion') navigator.vibrate(100);
+                    if (type === 'gameover') navigator.vibrate([100, 50, 100]);
+                }
+
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'shoot') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(800, now);
+                    osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+                    gainNode.gain.setValueAtTime(0.03, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                    osc.start(now); osc.stop(now + 0.1);
+                } else if (type === 'explosion') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, now);
+                    osc.frequency.exponentialRampToValueAtTime(10, now + 0.2);
+                    gainNode.gain.setValueAtTime(0.08, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    osc.start(now); osc.stop(now + 0.2);
+                } else if (type === 'gameover') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.linearRampToValueAtTime(100, now + 1);
+                    gainNode.gain.setValueAtTime(0.1, now);
+                    gainNode.gain.linearRampToValueAtTime(0, now + 1);
+                    osc.start(now); osc.stop(now + 1);
+                } else if (type === 'powerup') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.2);
+                    gainNode.gain.setValueAtTime(0.1, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                }
+            }
+
+            // --- INPUT ---
+            document.addEventListener('keydown', e => {
+                if (keys.hasOwnProperty(e.code)) keys[e.code] = true;
+                // Soporte adicional para barra espaciadora en algunos navegadores
+                if (e.key === ' ' || e.code === 'Space') keys['Space'] = true;
+
+                if ((gameState === 'START' || gameState === 'GAMEOVER') && e.code === 'Enter') initGame();
+            });
+            document.addEventListener('keyup', e => {
+                if (keys.hasOwnProperty(e.code)) keys[e.code] = false;
+                if (e.key === ' ' || e.code === 'Space') keys['Space'] = false;
+            });
+
+            // --- MEJORA DE CONTROLES TÁCTILES ---
+            function setupTouchBtn(btn, code) {
+                const activate = (e) => {
+                    if (e.cancelable) e.preventDefault();
+                    keys[code] = true;
+                    btn.classList.add('active');
+                };
+                const deactivate = (e) => {
+                    if (e.cancelable) e.preventDefault();
+                    keys[code] = false;
+                    btn.classList.remove('active');
+                };
+
+                // Usar eventos táctiles directos para mejor respuesta
+                btn.addEventListener('touchstart', activate, { passive: false });
+                btn.addEventListener('touchend', deactivate, { passive: false });
+                btn.addEventListener('touchcancel', deactivate, { passive: false });
+
+                // Fallback para ratón (PC)
+                btn.addEventListener('mousedown', activate);
+                btn.addEventListener('mouseup', deactivate);
+                btn.addEventListener('mouseleave', deactivate);
+            }
+
+            // Mejorar respuesta del botón de inicio en móviles
+            const handleStart = (e) => {
+                if (e.cancelable && e.type === 'touchstart') e.preventDefault();
+                initGame();
+            };
+            startBtn.addEventListener('touchstart', handleStart, { passive: false });
+            startBtn.addEventListener('click', handleStart);
+            document.getElementById('restart-btn').addEventListener('touchstart', handleStart, { passive: false });
+            document.getElementById('restart-btn').addEventListener('click', handleStart);
+
+            setupTouchBtn(btnLeft, 'ArrowLeft');
+            setupTouchBtn(btnRight, 'ArrowRight');
+            setupTouchBtn(btnShoot, 'Space');
+
+            // --- ENTIDADES ---
+            class Player {
+                constructor() {
+                    this.width = 40; this.height = 40;
+                    this.x = GAME_WIDTH / 2 - 20;
+                    this.y = GAME_HEIGHT - 80; // Posición segura relativa a la altura real
+                    this.speed = 8;
+                    this.color = COLORS.blue;
+                    this.lastShot = 0;
+                }
+                update() {
+                    if (keys['ArrowLeft'] && this.x > 0) this.x -= this.speed;
+                    if (keys['ArrowRight'] && this.x < GAME_WIDTH - this.width) this.x += this.speed;
+
+                    let now = Date.now();
+                    if (keys['Space'] && now - this.lastShot > 200) {
+                        projectiles.push(new Projectile(this.x, this.y, -12, COLORS.yellow, true));
+                        projectiles.push(new Projectile(this.x + this.width, this.y, -12, COLORS.yellow, true));
+                        playSound('shoot');
+                        this.lastShot = now;
+                    }
+                }
+                draw() {
+                    if (!isMobileDevice) {
+                        ctx.shadowColor = this.color; ctx.shadowBlur = 15;
+                    }
+                    ctx.strokeStyle = this.color; ctx.lineWidth = 2;
+                    ctx.strokeRect(this.x, this.y, this.width, this.height);
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y + this.height);
+                    ctx.lineTo(this.x - 10, this.y + this.height + 10);
+                    ctx.stroke();
+                    ctx.moveTo(this.x + this.width, this.y + this.height);
+                    ctx.lineTo(this.x + this.width + 10, this.y + this.height + 10);
+                    ctx.stroke();
+                    if (!isMobileDevice) ctx.shadowBlur = 0;
+                }
+            }
+
+            class Enemy {
+                constructor(x, y, type) {
+                    this.x = x; this.y = y;
+                    this.width = 30; this.height = 30;
+                    this.type = type;
+                    if (type === 1) { this.color = COLORS.red; this.points = 50; }
+                    else if (type === 2) { this.color = COLORS.pink; this.points = 30; }
+                    else { this.color = COLORS.green; this.points = 10; }
+                }
+                draw() {
+                    if (!isMobileDevice) {
+                        ctx.shadowColor = this.color; ctx.shadowBlur = 10;
+                    }
+                    ctx.strokeStyle = this.color; ctx.lineWidth = 2;
+                    if (this.type === 1) {
+                        ctx.beginPath(); ctx.moveTo(this.x, this.y);
+                        ctx.lineTo(this.x + this.width, this.y);
+                        ctx.lineTo(this.x + this.width / 2, this.y + this.height); ctx.closePath(); ctx.stroke();
+                    } else if (this.type === 2) {
+                        ctx.beginPath(); ctx.arc(this.x + 15, this.y + 15, 15, 0, Math.PI * 2); ctx.stroke();
+                    } else {
+                        ctx.strokeRect(this.x, this.y, this.width, this.height);
+                    }
+                    if (!isMobileDevice) ctx.shadowBlur = 0;
+                }
+            }
+
+            class Projectile {
+                constructor(x, y, s, c, p) {
+                    this.x = x; this.y = y; this.speed = s; this.color = c; this.isPlayer = p;
+                    this.w = 4; this.h = 12; this.del = false;
+                }
+                update() {
+                    this.y += this.speed;
+                    if (this.y < -20 || this.y > GAME_HEIGHT + 20) this.del = true;
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    if (!isMobileDevice) {
+                        ctx.shadowColor = this.color; ctx.shadowBlur = 8;
+                    }
+                    ctx.fillRect(this.x, this.y, this.w, this.h);
+                    if (!isMobileDevice) ctx.shadowBlur = 0;
+                }
+            }
+
+            class Particle {
+                constructor(x, y, c) {
+                    this.x = x; this.y = y; this.color = c;
+                    this.vx = (Math.random() - 0.5) * 8; this.vy = (Math.random() - 0.5) * 8;
+                    this.life = 1;
+                }
+                update() { this.x += this.vx; this.y += this.vy; this.life -= 0.04; }
+                draw() {
+                    ctx.globalAlpha = Math.max(0, this.life);
+                    ctx.fillStyle = this.color; ctx.fillRect(this.x, this.y, 3, 3);
+                    ctx.globalAlpha = 1;
+                }
+            }
+
+            class Powerup {
+                constructor(x, y) {
+                    this.x = x; this.y = y;
+                    this.width = 20; this.height = 20;
+                    this.speed = 3;
+                    this.del = false;
+                }
+                update() {
+                    this.y += this.speed;
+                    if (this.y > GAME_HEIGHT) this.del = true;
+                }
+                draw() {
+                    ctx.fillStyle = '#0f0';
+                    if (!isMobileDevice) {
+                        ctx.shadowColor = '#0f0'; ctx.shadowBlur = 10;
+                    }
+                    // Dibujar corazón simple
+                    ctx.beginPath();
+                    const topCurveHeight = this.height * 0.3;
+                    ctx.moveTo(this.x + this.width / 2, this.y + this.height / 5);
+                    ctx.bezierCurveTo(
+                        this.x + this.width / 2, this.y,
+                        this.x, this.y,
+                        this.x, this.y + topCurveHeight
+                    );
+                    ctx.bezierCurveTo(
+                        this.x, this.y + (this.height + topCurveHeight) / 2,
+                        this.x + this.width / 2, this.y + this.height,
+                        this.x + this.width / 2, this.y + this.height
+                    );
+                    ctx.bezierCurveTo(
+                        this.x + this.width / 2, this.y + this.height,
+                        this.x + this.width, this.y + (this.height + topCurveHeight) / 2,
+                        this.x + this.width, this.y + topCurveHeight
+                    );
+                    ctx.bezierCurveTo(
+                        this.x + this.width, this.y,
+                        this.x + this.width / 2, this.y,
+                        this.x + this.width / 2, this.y + this.height / 5
+                    );
+                    ctx.fill();
+                    if (!isMobileDevice) ctx.shadowBlur = 0;
+                }
+            }
+
+            // --- GAME LOOP ---
+            let player;
+            let enemies = [];
+            let projectiles = [];
+            let particles = [];
+            let powerups = [];
+            let enemyDir = 1;
+
+            function startGame() {
+                // Solicitar Pantalla Completa (Mejora de Inmersión)
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen().catch(err => console.log(err));
+                }
+
+                gameRunning = true;
+                gameState = 'PLAYING'; // CRÍTICO: Iniciar estado de juego
+                score = 0;
+                lives = 3;
+                level = 1;
+                scoreDisplay.innerText = `SCORE: ${score}`;
+                livesDisplay.innerText = `LIVES: ${lives}`;
+                startScreen.style.display = 'none';
+                gameOverScreen.style.display = 'none';
+                infoScreen.style.display = 'none';
+
+                // Activar estado de juego en CSS (Muestra controles en móvil)
+                document.body.classList.add('game-running');
+
+                player = new Player();
+                projectiles = [];
+                enemies = []; // Reset enemies here, initEnemies will populate
+                particles = [];
+                powerups = [];
+                initEnemies(); // Call initEnemies to populate
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                animate();
+            }
+
+            function endGame() {
+                gameState = 'GAMEOVER';
+                finalScoreDisplay.innerText = score;
+                gameOverScreen.style.display = 'block';
+
+                // Desactivar estado de juego
+                document.body.classList.remove('game-running');
+            }
+
+            function initEnemies() {
+                enemies = [];
+                let startX = (GAME_WIDTH - (8 * 50)) / 2;
+                for (let r = 0; r < 4; r++) {
+                    for (let c = 0; c < 8; c++) {
+                        let t = (r === 0) ? 1 : (r === 1 ? 2 : 3);
+                        enemies.push(new Enemy(startX + c * 50, 50 + r * 50, t));
+                    }
+                }
+            }
+
+            function checkCol(a, b) {
+                return (a.x < b.x + (b.width || b.w) && a.x + (a.width || a.w) > b.x &&
+                    a.y < b.y + (b.height || b.h) && a.y + (a.height || a.h) > b.y);
+            }
+
+            function animate() {
+                ctx.fillStyle = 'rgba(5, 5, 5, 0.4)';
+                ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+                if (gameState === 'PLAYING') {
+                    player.update(); player.draw();
+
+                    let hitEdge = false;
+                    enemies.forEach(e => {
+                        e.x += (1.5 + score * 0.001) * enemyDir;
+                        if (e.x <= 10 || e.x >= GAME_WIDTH - 40) hitEdge = true;
+
+                        if (e.y + e.height >= player.y) {
+                            lives = 0; livesDisplay.innerText = `LIVES: 0`;
+                            gameState = 'GAMEOVER'; playSound('gameover');
+                            gameOverScreen.style.display = 'block';
+                            finalScoreDisplay.innerText = score;
+                        }
+                        e.draw();
+                    });
+                    if (hitEdge) { enemyDir *= -1; enemies.forEach(e => e.y += 20); }
+
+                    if (Math.random() < 0.02 && enemies.length > 0) {
+                        let e = enemies[Math.floor(Math.random() * enemies.length)];
+                        projectiles.push(new Projectile(e.x + 15, e.y + 30, 5, COLORS.red, false));
+                    }
+
+                    projectiles.forEach(p => p.update());
+                    projectiles = projectiles.filter(p => !p.del);
+                    projectiles.forEach(p => p.draw());
+
+                    particles.forEach(p => p.update());
+                    particles = particles.filter(p => p.life > 0);
+                    particles.forEach(p => p.draw());
+
+                    // Powerups
+                    powerups.forEach(p => p.update());
+                    powerups = powerups.filter(p => !p.del);
+                    powerups.forEach(p => p.draw());
+
+                    // Colisión Player - Powerup
+                    powerups.forEach(p => {
+                        if (checkCol(p, { x: player.x, y: player.y, w: player.width, h: player.height })) {
+                            if (lives < 3) { // Límite de 3 vidas
+                                lives++;
+                                livesDisplay.innerText = `LIVES: ${lives}`;
+                                playSound('powerup');
+                                // Efecto visual
+                                for (let k = 0; k < 5; k++) particles.push(new Particle(player.x + 20, player.y + 20, '#0f0'));
+                            }
+                            p.del = true;
+                        }
+                    });
+
+                    projectiles.forEach(p => {
+                        if (p.isPlayer) {
+                            enemies.forEach((e, i) => {
+                                if (checkCol(p, e)) {
+                                    score += e.points; scoreDisplay.innerText = `SCORE: ${score}`;
+                                    for (let k = 0; k < 8; k++) particles.push(new Particle(e.x + 15, e.y + 15, e.color));
+
+                                    // Drop de Powerup (Vida Extra) - Nivel 2+
+                                    if (level >= 2 && Math.random() < 0.15) { // 15% probabilidad
+                                        powerups.push(new Powerup(e.x, e.y));
+                                    }
+
+                                    enemies.splice(i, 1); p.del = true; playSound('explosion');
+                                }
+                            });
+                        } else {
+                            if (checkCol(p, { x: player.x + 10, y: player.y + 10, w: 20, h: 20 })) {
+                                lives--; livesDisplay.innerText = `LIVES: ${lives}`;
+                                p.del = true; playSound('explosion');
+                                for (let k = 0; k < 10; k++) particles.push(new Particle(player.x + 20, player.y + 20, COLORS.blue));
+                                if (lives <= 0) { gameState = 'GAMEOVER'; playSound('gameover'); gameOverScreen.style.display = 'block'; finalScoreDisplay.innerText = score; }
+                            }
+                        }
+                    });
+
+                    if (enemies.length === 0) {
+                        level++;
+                        // Mensaje de nivel (opcional, visual simple)
+                        score += 1000; // Bonus por nivel
+                        scoreDisplay.innerText = `SCORE: ${score}`;
+                        initEnemies();
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            // --- EVENT LISTENERS ---
+            window.addEventListener('resize', resizeGame);
+
+            // Soporte Touch para botones de UI (Mejora de respuesta)
+            startBtn.addEventListener('click', startGame);
+            startBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startGame(); }, { passive: false });
+
+            const restartBtn = document.getElementById('restart-btn');
+            restartBtn.addEventListener('click', () => {
+                location.reload();
+            });
+            restartBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                location.reload();
+            }, { passive: false });
+
+            const infoBtn = document.getElementById('info-btn');
+            const closeInfoBtn = document.getElementById('close-info-btn');
+
+            // Toggle Info
+            function toggleInfo() {
+                if (infoScreen.style.display === 'block') {
+                    infoScreen.style.display = 'none';
+                    if (gameRunning) gameState = 'PLAYING';
+                } else {
+                    infoScreen.style.display = 'block';
+                    if (gameRunning) gameState = 'PAUSED';
+                }
+            }
+
+            infoBtn.addEventListener('click', toggleInfo);
+            infoBtn.addEventListener('touchstart', (e) => { e.preventDefault(); toggleInfo(); }, { passive: false });
+
+            closeInfoBtn.addEventListener('click', toggleInfo);
+            closeInfoBtn.addEventListener('touchstart', (e) => { e.preventDefault(); toggleInfo(); }, { passive: false });
+
+            // Touch controls (Gameplay)
+            // Left
+            btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowLeft'] = true; btnLeft.classList.add('active'); }, { passive: false });
+            btnLeft.addEventListener('touchend', (e) => { e.preventDefault(); keys['ArrowLeft'] = false; btnLeft.classList.remove('active'); });
+
+            // Right
+            btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowRight'] = true; btnRight.classList.add('active'); }, { passive: false });
+            btnRight.addEventListener('touchend', (e) => { e.preventDefault(); keys['ArrowRight'] = false; btnRight.classList.remove('active'); });
+
+            // Shoot
+            btnShoot.addEventListener('touchstart', (e) => { e.preventDefault(); keys['Space'] = true; btnShoot.classList.add('active'); }, { passive: false });
+            btnShoot.addEventListener('touchend', (e) => { e.preventDefault(); keys['Space'] = false; btnShoot.classList.remove('active'); });
+
+            // Keyboard controls
+            window.addEventListener('keydown', (e) => {
+                if (e.code === 'ArrowLeft') keys['ArrowLeft'] = true;
+                if (e.code === 'ArrowRight') keys['ArrowRight'] = true;
+                if (e.code === 'Space') keys['Space'] = true;
+                if (e.code === 'Enter' && !gameRunning) startGame();
+            });
+
+            window.addEventListener('keyup', (e) => {
+                if (e.code === 'ArrowLeft') keys['ArrowLeft'] = false;
+                if (e.code === 'ArrowRight') keys['ArrowRight'] = false;
+                if (e.code === 'Space') keys['Space'] = false;
+            });
+
+            // Loop principal
+            animate();
+
+        </script>
+</body>
+
+</html>
