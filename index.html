@@ -394,13 +394,20 @@
                 padding-top: 20px;
             }
 
-            /* Ajuste Logo Portrait - Más pequeño aún */
+            /* Ajuste Logo Portrait - CORRECCIÓN DEFINITIVA */
             #start-screen img {
-                max-height: 15vh;
-                /* Reducido a 15vh */
-                width: 100%;
-                max-width: 250px;
+                display: block;
+                margin: 0 auto 15px auto;
+                /* Centrado y margen inferior */
+                width: auto;
+                /* Dejar que el ancho se ajuste */
+                max-width: 80%;
+                /* No ocupar todo el ancho */
+                max-height: 20vh;
+                /* Altura segura */
                 object-fit: contain;
+                filter: drop-shadow(0 0 10px #ff00ff);
+                /* Restaurar brillo si se perdió */
             }
 
             /* Controles: Ocultos por defecto, visibles al jugar */
