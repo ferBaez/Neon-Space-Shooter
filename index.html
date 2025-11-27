@@ -294,7 +294,8 @@
 
         /* Modales */
         .modal {
-            position: absolute;
+            position: fixed;
+            /* Fixed para centrar en pantalla, no en wrapper */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -398,25 +399,16 @@
                 padding-top: 20px;
             }
 
-            /* Bajar un poco el modal para que no se corte arriba */
-            .modal {
-                top: 55%;
-            }
-
             /* Ajuste Logo Portrait - CORRECCIÓN DEFINITIVA */
             #start-screen img {
                 display: block;
-                margin: 0 auto 15px auto;
-                /* Centrado y margen inferior */
+                margin: 0 auto 10px auto;
                 width: auto;
-                /* Dejar que el ancho se ajuste */
                 max-width: 80%;
-                /* No ocupar todo el ancho */
-                max-height: 20vh;
-                /* Altura segura */
+                max-height: 12vh;
+                /* Reducido para asegurar visibilidad */
                 object-fit: contain;
                 filter: drop-shadow(0 0 10px #ff00ff);
-                /* Restaurar brillo si se perdió */
             }
 
             /* Controles: Ocultos por defecto, visibles al jugar */
@@ -983,6 +975,7 @@
                 }
 
                 gameRunning = true;
+                gameState = 'PLAYING'; // CRÍTICO: Iniciar estado de juego
                 score = 0;
                 lives = 3;
                 level = 1;
