@@ -537,6 +537,16 @@
                 height: 80px;
                 margin-bottom: 20px;
                 background: rgba(0, 0, 0, 0.5);
+                border-radius: 50%;
+                /* Make round */
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                transition: all 0.1s;
+            }
+
+            .control-btn.active {
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(0.95);
+                border-color: #fff;
             }
 
             .control-group {
@@ -589,8 +599,8 @@
             }
         }
 
-        /* OPTIMIZACIÓN PORTRAIT FULL SCREEN */
-        @media (max-width: 1024px) and (orientation: portrait) {
+        /* OPTIMIZACIÓN MÓVIL (Cualquier pantalla estrecha) */
+        @media (max-width: 1024px) {
             #main-container {
                 padding: 0;
                 justify-content: center;
@@ -768,7 +778,9 @@
                 red: '#f00', yellow: '#ff0', white: '#fff'
             };
 
-            let isMobileDevice = false;
+            // Detección robusta de móvil
+            let isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
+            console.log("Is Mobile Device detected:", isMobileDevice); // DEBUG
 
             // --- RESIZE INTELIGENTE (HIGH DPI SUPPORT) ---
             function resizeGame() {
@@ -1237,15 +1249,28 @@
                 closeInfoBtn.onclick = toggleInfo;
                 closeInfoBtn.ontouchstart = (e) => { e.preventDefault(); toggleInfo(); };
 
-                // Touch Controls
-                btnLeft.ontouchstart = (e) => { e.preventDefault(); keys['ArrowLeft'] = true; btnLeft.classList.add('active'); };
-                btnLeft.ontouchend = (e) => { e.preventDefault(); keys['ArrowLeft'] = false; btnLeft.classList.remove('active'); };
+                // Touch Controls with Debugging
+                const handleTouchStart = (key, btn) => (e) => {
+                    e.preventDefault();
+                    console.log(`Touch Start: ${key}`); // DEBUG
+                    keys[key] = true;
+                    btn.classList.add('active');
+                };
+                const handleTouchEnd = (key, btn) => (e) => {
+                    e.preventDefault();
+                    console.log(`Touch End: ${key}`); // DEBUG
+                    keys[key] = false;
+                    btn.classList.remove('active');
+                };
 
-                btnRight.ontouchstart = (e) => { e.preventDefault(); keys['ArrowRight'] = true; btnRight.classList.add('active'); };
-                btnRight.ontouchend = (e) => { e.preventDefault(); keys['ArrowRight'] = false; btnRight.classList.remove('active'); };
+                btnLeft.ontouchstart = handleTouchStart('ArrowLeft', btnLeft);
+                btnLeft.ontouchend = handleTouchEnd('ArrowLeft', btnLeft);
 
-                btnShoot.ontouchstart = (e) => { e.preventDefault(); keys['Space'] = true; btnShoot.classList.add('active'); };
-                btnShoot.ontouchend = (e) => { e.preventDefault(); keys['Space'] = false; btnShoot.classList.remove('active'); };
+                btnRight.ontouchstart = handleTouchStart('ArrowRight', btnRight);
+                btnRight.ontouchend = handleTouchEnd('ArrowRight', btnRight);
+
+                btnShoot.ontouchstart = handleTouchStart('Space', btnShoot);
+                btnShoot.ontouchend = handleTouchEnd('Space', btnShoot);
 
                 // Keyboard controls
                 window.onkeydown = (e) => {
