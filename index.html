@@ -803,7 +803,7 @@
 
                 // Reposicionar jugador al cambiar tamaño
                 if (typeof player !== 'undefined' && player) {
-                    player.y = GAME_HEIGHT - 100; // Un poco más arriba del fondo
+                    player.y = GAME_HEIGHT - 180; // Mantener posición segura
                     // Mantener dentro de los límites horizontales
                     if (player.x > GAME_WIDTH - player.width) player.x = GAME_WIDTH - player.width - 10;
                     if (player.x < 0) player.x = 10;
@@ -912,14 +912,34 @@
                 constructor() {
                     this.width = 40; this.height = 40;
                     this.x = GAME_WIDTH / 2 - 20;
-                    this.y = GAME_HEIGHT - 80; // Posición segura relativa a la altura real
+                    this.y = GAME_HEIGHT - 180; // MÁS ARRIBA: Evitar controles y borde inferior
                     this.speed = 8;
                     this.color = COLORS.blue;
                     this.lastShot = 0;
+
+                    // Invulnerabilidad inicial
+                    this.invulnerable = true;
+                    this.invulnerableTimer = Date.now();
+                    this.blink = true;
                 }
                 update() {
+                    // Movimiento
                     if (keys['ArrowLeft'] && this.x > 0) this.x -= this.speed;
                     if (keys['ArrowRight'] && this.x < GAME_WIDTH - this.width) this.x += this.speed;
+
+                    // Gestionar invulnerabilidad (3 segundos)
+                    if (this.invulnerable) {
+                        if (Date.now() - this.invulnerableTimer > 3000) {
+                            this.invulnerable = false;
+                            this.blink = false;
+                        } else {
+                            // Parpadeo cada 200ms
+                            if (Math.floor(Date.now() / 200) % 2 === 0) this.blink = true;
+                            else this.blink = false;
+                        }
+                    } else {
+                        this.blink = true; // Siempre visible si no es invulnerable
+                    }
 
                     let now = Date.now();
                     if (keys['Space'] && now - this.lastShot > 200) {
@@ -930,16 +950,21 @@
                     }
                 }
                 draw() {
+                    if (!this.blink) return; // Efecto parpadeo
+
+                    ctx.fillStyle = this.color;
                     if (!isMobileDevice) {
                         ctx.shadowColor = this.color; ctx.shadowBlur = 15;
                     }
-                    ctx.strokeStyle = this.color; ctx.lineWidth = 2;
-                    ctx.strokeRect(this.x, this.y, this.width, this.height);
+                    // Dibujar nave (Triángulo futurista)
                     ctx.beginPath();
-                    ctx.moveTo(this.x, this.y + this.height);
-                    ctx.lineTo(this.x - 10, this.y + this.height + 10);
-                    ctx.stroke();
-                    ctx.moveTo(this.x + this.width, this.y + this.height);
+                    ctx.moveTo(this.x + this.width / 2, this.y);
+                    ctx.lineTo(this.x + this.width, this.y + this.height);
+                    ctx.lineTo(this.x + this.width / 2, this.y + this.height - 10);
+                    ctx.lineTo(this.x, this.y + this.height);
+                    ctx.closePath();
+                    ctx.fill();
+                    if (!isMobileDevice) ctx.shadowBlur = 0;
                     ctx.lineTo(this.x + this.width + 10, this.y + this.height + 10);
                     ctx.stroke();
                     if (!isMobileDevice) ctx.shadowBlur = 0;
@@ -1196,6 +1221,22 @@
                         initEnemies();
                     }
                 }
+
+                // Colisiones Enemigo-Jugador
+                enemies.forEach(enemy => {
+                    if (checkCol(player, enemy) && !player.invulnerable) {
+                        lives--;
+                        livesDisplay.innerText = `LIVES: ${lives}`;
+                        playSound('explosion');
+                        for (let k = 0; k < 10; k++) particles.push(new Particle(player.x + 20, player.y + 20, COLORS.blue)); // Reemplazado createParticles con bucle existente
+                        if (lives <= 0) endGame();
+                        else {
+                            // Respawn seguro temporal
+                            player.invulnerable = true;
+                            player.invulnerableTimer = Date.now();
+                        }
+                    }
+                });
 
                 requestAnimationFrame(animate);
             }
