@@ -803,7 +803,7 @@
 
                 // Reposicionar jugador al cambiar tamaño
                 if (typeof player !== 'undefined' && player) {
-                    player.y = GAME_HEIGHT - 180; // Mantener posición segura
+                    player.y = GAME_HEIGHT - 130; // Mantener posición segura
                     // Mantener dentro de los límites horizontales
                     if (player.x > GAME_WIDTH - player.width) player.x = GAME_WIDTH - player.width - 10;
                     if (player.x < 0) player.x = 10;
@@ -912,7 +912,7 @@
                 constructor() {
                     this.width = 40; this.height = 40;
                     this.x = GAME_WIDTH / 2 - 20;
-                    this.y = GAME_HEIGHT - 180; // MÁS ARRIBA: Evitar controles y borde inferior
+                    this.y = GAME_HEIGHT - 130; // AJUSTE: Posición intermedia (Feedback usuario)
                     this.speed = 8;
                     this.color = COLORS.blue;
                     this.lastShot = 0;
